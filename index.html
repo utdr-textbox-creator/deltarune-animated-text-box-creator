@@ -1,0 +1,2693 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8" />
+	<meta id="viewport" name="viewport"
+		content="width=device-width, height=device-height, initial-scale=1, minimum-scale=1" />
+	<link rel="stylesheet" href="styles.css">
+	<title>Textbox + SFX Sync — Preview & Video</title>
+	<script src="coi-serviceworker.js"></script>
+
+</head>
+
+<body>
+	<div class="wrap">
+		<h1>Textbox + Sound — Preview & Video (synced)</h1>
+
+		<div class="row">
+			<div class="col">
+				<div class="wysiwyg-toolbar">
+					<div class="wysiwyg-group">
+						<label for="wysiwyg-toggle">WYSIWYG</label>
+						<input type="checkbox" id="wysiwyg-toggle">
+					</div>
+					<div class="wysiwyg-group">
+						<label>Color</label>
+						<div id="color-palette" class="color-palette">
+							<!-- Static swatches will be generated here -->
+							<div id="recent-colors" class="color-palette"></div>
+							<input type="color" id="color-picker">
+						</div>
+					</div>
+					<div class="wysiwyg-group">
+						<label>Insert Delay</label>
+						<select id="insert-delay-select"></select>
+						<button id="insert-delay-btn">Insert</button>
+					</div>
+					<div class="wysiwyg-group">
+						<label>Insert Effect</label>
+						<select id="insert-effect-select"></select>
+						<button id="insert-effect-btn">Insert</button>
+					</div>
+				</div>
+				<div class="textarea-container">
+
+					<div class="textarea-buttons left">
+						<button id="previousTextBoxButton" title="Goes to previous textbox" disabled>←</button>
+						<button id="deleteTextBoxButton" title="Deletes the current textbox" disabled>🗑️</button>
+					</div>
+
+					<div class="textarea-wrapper">
+
+						<textarea id="inputText" placeholder="Hello.^3 This is a test..."></textarea>
+						<div id="wysiwyg-editor" contenteditable="true" spellcheck="false" class="hidden"></div>
+					</div>
+
+					<div class="textarea-buttons right">
+						<button id="nextTextBoxButton" title="Goes to next textbox" disabled>→</button>
+						<button id="addTextBoxButton" title="Adds a new textbox">+</button>
+
+
+					</div>
+				</div>
+				<div class="panel"
+					style="padding: 8px; margin-top: 4px; display: flex; align-items: center; justify-content: space-between; gap: 15px;">
+					<div style="font-weight: bold;">Textbox: <span id="textBoxCounter">1 / 1</span></div>
+					<div class="wysiwyg-group" style="flex-grow: 1;">
+						<label for="delayAfter" style="margin: 0;">Delay After (ms)</label>
+						<input id="delayAfter" type="number" value="500" min="0" style="padding: 5px;" />
+					</div>
+
+				</div>
+
+				<div class="controls" style="margin-top:10px;">
+					<div>
+						<label>Sound Pack</label>
+						<select id="soundPackSelect"></select>
+					</div>
+
+					<!-- MODIFIED CONTAINER STRUCTURE -->
+					<div class="portrait-selector-wrapper">
+						<label>Portraits (from pack)</label>
+						<div id="portraitSelectionContainer" style="padding: 0; border: none; background: transparent;">
+							<div class="portrait-preview-status"><span class="small">(Select a pack with images)</span>
+							</div>
+						</div>
+					</div>
+					<!-- END MODIFIED CONTAINER STRUCTURE -->
+
+					<div>
+						<label>Delay Mode</label>
+						<select id="delayModeSelect">
+							<option value="deltarune">Deltarune</option>
+							<option value="ms">Milliseconds</option>
+						</select>
+					</div>
+					<div>
+						<label>Ignored characters</label>
+						<input id="ignoreChars" value=" .*,?!" />
+					</div>
+					<div>
+						<label>Time per char (ms)</label>
+						<input id="timePerChar" type="number" value="33.33" min="5" />
+					</div>
+					<div>
+						<label>Play every Nth char</label>
+						<input id="playEveryN" type="number" value="1" min="1" />
+					</div>
+					<div>
+						<label>Textbox mode</label>
+						<select id="modeSelect">
+							<option value="Dark World">Dark World</option>
+							<option value="Undertale">Undertale / Light World</option>
+							<option value="gameboard">Gameboard (CH3)</option>
+						</select>
+					</div>
+					<div>
+						<label>Min pitch</label>
+						<input id="minPitch" type="number" step="0.05" value="1" />
+					</div>
+					<div>
+						<label>Max pitch</label>
+						<input id="maxPitch" type="number" step="0.05" value="1" />
+					</div>
+				</div>
+
+				<div style="display:flex;gap:8px;margin-top:10px;">
+					<button id="previewBtn">Preview Animation</button>
+					<button id="recordBtn">Record Video</button>
+					<button id="recordLosslessBtn" style="background:#4a2d7c">Record Lossless Video (MP4)</button>
+					<button id="renderAudioBtn" style="background:#666">Create Audio (WAV)</button>
+				</div>
+
+				<div class="panel" style="margin-top:10px;">
+					<label class="small">Audio preview / download</label>
+					<audio id="audioPlayer" controls style="width:100%"></audio>
+					<div style="margin-top:8px">
+						<a id="downloadLink" class="download-link" download="generated_sound.wav"
+							style="display:none">Download
+							WAV</a>
+						<a id="downloadVideoLink" class="download-link" style="display:none">Download Video</a>
+					</div>
+					<div id="status" class="small" style="margin-top:8px"></div>
+				</div>
+			</div>
+
+			<div class="col">
+				<div class="panel" style="margin-top: 50px;">
+					<label class="small">Live HTML textbox</label>
+					<div id="htmlPreview" class="undertale-box" style="margin-top:6px">
+						<div id="portraitPreview" class="portrait">P</div>
+						<div id="textPreview" class="txt-area">Preview text appears here.</div>
+					</div>
+
+					<div class="canvas-fixed-container">
+						<div class="canvas-overlay-wrapper">
+							<canvas style="image-rendering: pixelated; zoom: 0.50" id="renderCanvas" width="593"
+								height="167"></canvas>
+							<canvas style="image-rendering: pixelated; zoom: 0.50" id="shaderCanvas" width="593"
+								height="167"></canvas>
+						</div>
+
+						<div style="margin-top:8px">
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</body>
+
+</html>
+
+
+
+<script src="https://unpkg.com/@ffmpeg/ffmpeg@0.11.6/dist/ffmpeg.min.js"></script>
+<script src='./twgl-full.js'></script>
+<script src='./wysiwyg-editor.js'></script>
+
+<script id="vs" type="x-shader/x-vertex">
+attribute vec4 position;
+varying vec2 v_texCoord;
+
+void main() {
+	// Pass the texCoord to the fragment shader
+	// The GPU interpolates this value between vertices
+	v_texCoord = position.xy * 0.5 + 0.5;
+	v_texCoord.y = 1.0 - v_texCoord.y; // Flip Y for canvas texture
+
+	gl_Position = position;
+}
+</script>
+
+<!-- Fragment Shader: Runs for every pixel to apply the glow -->
+<script id="fs" type="x-shader/x-fragment">
+precision mediump float;
+
+// varying from the vertex shader (provides texture coordinates)
+varying vec2 v_texCoord;
+
+// Uniforms (variables passed from JavaScript)
+uniform sampler2D u_texture;          // Our main texture (the 2D canvas content)
+uniform vec2 u_resolution;            // The resolution of the canvas (e.g., [593, 167])
+uniform float u_time;                 // A time uniform for animations, in seconds
+uniform vec4 u_virtual_rect;
+
+// --- Effect Control Uniforms ---
+// You can adjust these values in JavaScript to change the effect strength
+uniform float u_vignette_scale;       // Controls the softness/hardness of the vignette edge (e.g., 0.25)
+uniform float u_vignette_intensity;   // Controls the overall darkness of the vignette (e.g., 15.0)
+uniform float u_chromatic_scale;      // Controls the strength of the chromatic aberration (e.g., 2.0)
+uniform float u_filter_amount;        // Controls the mix of the RGB filter (0.0 to 1.0, e.g., 0.05)
+
+// --- NEW UNIFORM ---
+// This will control the "pixel size" of the effects.
+// A value of 1.0 is no scaling.
+// A value of 2.0 makes the effect pixels 2x2 in size.
+// A value of 4.0 makes them 4x4, etc.
+uniform float u_effect_scale;         // (e.g., 4.0)
+
+
+// (Utility functions are unchanged)
+vec3 toLinear(vec3 srgb) {
+		return pow(srgb, vec3(2.2));
+}
+
+vec3 toSrgb(vec3 linear) {
+		return pow(linear, vec3(1.0 / 2.2));
+}
+
+
+void main()
+{
+		// --- START: VIRTUAL CANVAS CALCULATION ---
+		// (This part is unchanged)
+		vec2 pixel_coord = v_texCoord * u_resolution;
+		vec2 relative_coord = pixel_coord - u_virtual_rect.xy;
+		vec2 virtual_texCoord = relative_coord / u_virtual_rect.zw;
+		// --- END: VIRTUAL CANVAS CALCULATION ---
+
+
+		// --- START: EFFECT SCALING SETUP ---
+		// Create a new, "pixelated" coordinate system for the effects.
+		// We divide the fragment coordinate by our scale factor and floor it
+		// to make blocks of pixels share the same coordinate value.
+		vec2 scaled_coord = floor(gl_FragCoord.xy / u_effect_scale);
+		// --- END: EFFECT SCALING SETUP ---
+
+
+		// Start with the original color
+		vec4 col = texture2D(u_texture, v_texCoord);
+
+		// --- 1. RGB Filter --- (MODIFIED)
+		// Use the new `scaled_coord` instead of `gl_FragCoord`.
+		// This makes the RGB pattern appear in larger blocks.
+		float rgbindex = floor(mod(scaled_coord.x - scaled_coord.y - u_time * 100.0, 3.0));
+	vec3 rgbcol = vec3(max(0.,1.-rgbindex),mod(rgbindex,2.0)*0.5,max(0.,rgbindex-1.));
+	col.rgb = mix(col.rgb,rgbcol,u_filter_amount);
+
+		// --- 2. Chromatic Aberration --- (MODIFIED)
+		// The shift amount is now multiplied by our new scale factor.
+		// This makes the color separation wider, matching the scaled-up aesthetic.
+		vec2 texel = 1.0 / u_resolution;
+		float dist = 1.0;
+		float shift = texel.x * dist * u_chromatic_scale * u_effect_scale; // Apply scale here
+		col.r = texture2D(u_texture, vec2(v_texCoord.x + shift, v_texCoord.y)).r;
+		col.b = texture2D(u_texture, vec2(v_texCoord.x - shift, v_texCoord.y)).b;
+
+		// --- 3. Vignette --- (Unchanged)
+		// This effect is already tied to the virtual rect, which is what we want.
+		// Scaling it with the other effects might cause it to become misaligned.
+		vec2 vuv = virtual_texCoord * (1.0 - virtual_texCoord.yx);
+		float vig = vuv.x * vuv.y * u_vignette_intensity;
+		float bri = pow(vig, u_vignette_scale);
+
+		// Clamp brightness to 1.0 outside the box.
+		float outside_box_x = step(1.0, virtual_texCoord.x) + step(virtual_texCoord.x, 0.0);
+		float outside_box_y = step(1.0, virtual_texCoord.y) + step(virtual_texCoord.y, 0.0);
+		float outside_box = clamp(outside_box_x + outside_box_y, 0.0, 1.0);
+		
+		// Mix between the calculated brightness and full brightness (1.0) based on whether we are outside the box.
+		bri = mix(bri, 1.0, outside_box);
+		
+		col.rgb *= bri;
+
+		// Set the final pixel color
+		gl_FragColor = col;
+}
+</script>
+
+<script>
+	/* --------------------------
+		Simplified but full-featured implementation:
+		- When user clicks Preview or Record or Create Audio:
+			* parse the text into a display timeline (strip ^N sequences from display)
+			* load pack samples
+			* schedule live audio via WebAudio (AudioContext)
+			* animate the canvas/text using the same timeline (so they sync)
+			* if Record: create MediaStream from canvas + AudioContext destination and MediaRecorder it
+			* concurrently start an OfflineAudioContext to render WAV and set download link when ready
+		- Canvas styling uses computed styles of #htmlPreview and .txt-area to keep them identical
+	---------------------------*/
+
+	// Base64 font data has been removed as per request.
+	// These variables expect the font images to be loaded from an external source.
+	const fontCharMap = ' !"#$%&\'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ\[\\\]^_`abcdefghijklmnopqrstuvwxyz{|}~';
+
+	// --- NEW: Spritesheet Setup ---
+	let isAnimatedBackgroundReady = false;
+
+	// 1. Define the spritesheet properties
+	const textboxSprite = {
+		image: new Image(),
+		frameWidth: 16,
+		frameHeight: 16,
+		totalFrames: 8, // The sheet has 10 frames vertically
+		animationInterval: 333.33, // 330ms per frame as requested
+	};
+	const textboxSpriteTop = {
+		image: new Image(),
+
+
+	};
+	const textboxSpriteSides = {
+		image: new Image(),
+
+
+	};
+	textboxSpriteTop
+
+	textboxSprite.image.src = './images/dark_world_textbox_sheet.webp';
+	textboxSpriteTop.image.src = './images/spr_textbox_top.webp';
+	textboxSpriteSides.image.src = './images/spr_textbox_left.webp';
+
+
+	// 2. Define the animation state
+
+	// 3. Set up the image loader
+	textboxSprite.image.onload = () => {
+		isAnimatedBackgroundReady = true;
+		// console.log("Textbox spritesheet loaded successfully.");
+	};
+
+	textboxSprite.image.onerror = () => {
+		isAnimatedBackgroundReady = false;
+		console.error("Failed to load spritesheet. Make sure the file exists at './images/dark_world_textbox_sheet.webp'.");
+	};
+
+	let funnyTexts = [
+		{
+			image: new Image(),
+			images: [], // For folder-based animations
+			name: 'Physical Challenge',
+			src: './images/spr_funnytext_physical_challenge_0.webp',
+			frameWidth: 391,
+			frameHeight: 69,
+			totalFrames: 18,
+			imageWidthOffset: 0,
+			imageHeightOffset: -10,
+			animationInterval: 33.333,
+			file: "./sounds/snd_ftext_bounce.wav",
+		},
+		{
+			image: new Image(),
+			images: [], // For folder-based animations
+			name: 'Fun Loop',
+			src: './images/spr_funnytext_fun_loop_0-sheet.webp',
+			frameWidth: 104,
+			frameHeight: 55,
+			totalFrames: 14,
+			imageWidthOffset: -10,
+			imageHeightOffset: -20,
+			animationInterval: 33.333,
+			bounce: false,
+			file: "./sounds/snd_crowd_cheer_single.wav",
+		},
+		{
+			image: new Image(),
+			images: [], // For folder-based animations
+			name: 'Test',
+			src: './images/spr_textbox_topleft',
+			frameWidth: 32,
+			frameHeight: 32,
+			totalFrames: 8,
+			previewFrame: 0,
+			imageWidthOffset: 0,
+			imageHeightOffset: 0,
+			animationInterval: 33.333,
+			file: "./sounds/snd_crowd_cheer_single.wav"
+		},
+		{
+			image: new Image(),
+			images: [], // For folder-based animations
+			name: 'Flurry',
+			src: './images/spr_roaringknight_flurry.webp',
+			frameWidth: 128,
+			frameHeight: 133,
+			totalFrames: 42,
+			previewFrame: 0,
+			imageWidthOffset: 0,
+			imageHeightOffset: -38,
+			animationInterval: 33.333,
+			loop: false,
+			shake: true,
+			file: "./sounds/snd_knight_cut.mp3"
+		}
+		// Add more sprites here, e.g., funnyTexts[1], funnyTexts[2], etc.
+	];
+	funnyTexts.forEach(sprite => {
+		// If the src path does not appear to have a file extension, treat it as a folder.
+		const lastDot = sprite.src.lastIndexOf('.');
+		const lastSlash = sprite.src.lastIndexOf('/');
+		const hasExtension = lastDot > -1 && lastDot > lastSlash;
+		const isFolder = !hasExtension && sprite.totalFrames > 0;
+
+		if (isFolder) {
+			// Load a sequence of images from a folder
+			sprite.isFolder = true; // Flag for the draw function
+			const imagePromises = [];
+			const imageExtensions = ['png', 'webp', 'jpg', 'gif']; // Common extensions to check
+
+			for (let i = 0; i < sprite.totalFrames; i++) {
+				const promise = new Promise((resolve, reject) => {
+					const baseSrc = `${sprite.src}/frame (${i + 1})`; // Correctly look for files inside the folder
+					let foundImage = false;
+
+					function tryLoad(extIndex) {
+						if (extIndex >= imageExtensions.length) {
+							// If we've tried all extensions and none worked for this frame number
+							console.warn(`Could not find image for frame ${i} with base path ${sprite.src}`);
+							resolve(null); // Resolve with null to not break Promise.all
+							return;
+						}
+						const ext = imageExtensions[extIndex];
+						const frameSrc = `${baseSrc}.${ext}`;
+						const img = new Image();
+						img.onload = () => {
+							console.log(`Funny sprite frame loaded: ${frameSrc}`);
+							resolve({ img, index: i });
+						};
+						img.onerror = () => tryLoad(extIndex + 1); // Try next extension on error
+						img.src = frameSrc;
+					}
+					tryLoad(0);
+				});
+				imagePromises.push(promise);
+			}
+
+			Promise.all(imagePromises).then(loadedImages => {
+				// Filter out any nulls from failed loads and sort by index to ensure correct order
+				sprite.images = loadedImages.filter(Boolean).sort((a, b) => a.index - b.index).map(item => item.img);
+				if (sprite.images.length > 0) {
+					// Use the specified preview frame, or default to the first frame.
+					const previewIndex = sprite.previewFrame || 0;
+					sprite.image = sprite.images[Math.min(previewIndex, sprite.images.length - 1)];
+				}
+			});
+		} else {
+			// Load a single spritesheet
+			sprite.image.src = sprite.src;
+			// sprite.image.onload = () => console.log(`Funny sprite loaded: ${sprite.src}`);
+			// sprite.image.onerror = () => console.error(`Failed to load funny sprite: ${sprite.src}`);
+		}
+	});
+
+
+	let loadedFunnyText = [  //Temp until loader is added
+		funnyTexts[0],
+		funnyTexts[1],
+		funnyTexts[2],
+		funnyTexts[3],
+	]
+
+
+	/* ----- Packs (example) ----- */
+	let soundPacks = {};
+	const deltaruneDelayMap = { '1': 5, '2': 10, '3': 15, '4': 20, '5': 30, '6': 40, '7': 60, '8': 90, '9': 150, };
+	const specialChars = ["&", "\n"];
+	const GLOBAL_DEFAULT_TIME_PER_CHAR = 33.33;
+	const GLOBAL_DEFAULT_MIN_PITCH = 1;
+	const GLOBAL_DEFAULT_MAX_PITCH = 1;
+	const GLOBAL_DEFAULT_PLAY_EVERY_N = 1;
+
+	// --- NEW: Asset loading tracker for initial preview render ---
+	let assetsToLoad = 4; // font.png, fnt_8bit.png, darkworldblue_grad.png
+	function assetLoaded() {
+		assetsToLoad--;
+		if (assetsToLoad === 0) {
+			renderStaticPreview();
+		}
+	}
+
+	const undertale_font = { image: null, map: fontCharMap, charWidth: 42, charHeight: 42, charGap: -26 };
+	undertale_font.image = new Image(); undertale_font.image.onload = assetLoaded; undertale_font.image.src = './images/fnt_mainfont.webp';
+
+	const font_board = { image: null, map: fontCharMap, charWidth: 16, charHeight: 20, charGap: 0 };
+	font_board.image = new Image(); font_board.image.onload = assetLoaded; font_board.image.src = './images/fnt_8bit.webp';
+
+	const undertale_font_dw_b = { image: null, map: fontCharMap, charWidth: 42, charHeight: 42, charGap: -26 };
+	undertale_font_dw_b.image = new Image(); undertale_font_dw_b.image.onload = assetLoaded; undertale_font_dw_b.image.src = './images/fnt_darkworldblue_grad.webp';
+
+
+	/* ----- DOM ----- */
+	const $ = id => document.getElementById(id);
+	const inputText = $('inputText');
+	const previousTextBoxButton = $('previousTextBoxButton'), nextTextBoxButton = $('nextTextBoxButton'), addTextBoxButton = $('addTextBoxButton'), deleteTextBoxButton = $('deleteTextBoxButton'), textBoxCounter = $('textBoxCounter');
+	const soundPackSelect = $('soundPackSelect'), portraitSelectionContainer = $('portraitSelectionContainer');
+	const delayModeSelect = $('delayModeSelect'), ignoreChars = $('ignoreChars'), timePerChar = $('timePerChar');
+	const minPitch = $('minPitch'), maxPitch = $('maxPitch');
+	const previewBtn = $('previewBtn'), recordBtn = $('recordBtn'), renderAudioBtn = $('renderAudioBtn');
+	const audioPlayer = $('audioPlayer'), downloadLink = $('downloadLink'), status = $('status');
+	const htmlPreview = $('htmlPreview'), textPreview = $('textPreview'), portraitPreview = $('portraitPreview');
+	const canvas = $('renderCanvas'), shader = $('shaderCanvas'), downloadVideoLink = $('downloadVideoLink');
+	const delayAfterInput = $('delayAfter');
+	const playEveryNInput = $('playEveryN'), modeSelect = $('modeSelect');
+
+	const canvasFixedContainer = document.querySelector('.canvas-fixed-container');
+
+	let optionsPanel = null;
+	// --- WYSIWYG Elements ---
+	let wysiwyg;
+
+	/* ----- WebGL Shader Setup ----- */
+	const gl = shaderCanvas.getContext('webgl');
+	const programInfo = twgl.createProgramInfo(gl, ["vs", "fs"]);
+
+	// A simple quad (rectangle) that fills the screen
+	const arrays = {
+		position: [-1, -1, 0, 1, -1, 0, -1, 1, 0, -1, 1, 0, 1, -1, 0, 1, 1, 0],
+	};
+	const bufferInfo = twgl.createBufferInfoFromArrays(gl, arrays);
+
+	let resFactor = 2
+
+	// Create a texture to hold the 2D canvas content
+	const texture = twgl.createTexture(gl, {
+		src: shaderCanvas,
+		min: gl.LINEAR,
+		wrap: gl.CLAMP_TO_EDGE,
+	});
+
+	/* ----- Audio contexts and caches ----- */
+	const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+	const decoderCtx = new (window.AudioContext || window.webkitAudioContext)();
+	const audioBufferCache = {};
+	// --- NEW: Centralized Audio Destination for Recording ---
+	const mainAudioDestination = audioCtx.createMediaStreamDestination();
+	const mainAudioGain = audioCtx.createGain();
+	mainAudioGain.connect(mainAudioDestination);
+	const imageCache = {}; // Cache for preloaded portrait images
+
+
+	// 1. Create a single, reusable offscreen canvas for character tinting.
+	const tintBufferCanvas = document.createElement('canvas');
+	const tintBufferCtx = tintBufferCanvas.getContext('2d');
+	tintBufferCtx.imageSmoothingEnabled = false;
+	// 2. Create a cache to store the pre-tinted character images.
+	const tintCache = {};
+
+	/* ----- State ----- */
+	let last = { timeline: [], events: [], duration: 0, packKey: null };
+	let selectedPortraits = {}; // { type: imageObject }
+	let lastSoundPack = null;
+	let mouthAnimationState = {
+		isAnimating: false, // Corresponds to mouthmove/mouthtimer > 0
+		startTime: 0,       // When the current animation cycle started
+		buffer: 4,          // Initial frame delay from GML
+		prevCharCount: 0    // To detect when a new character is drawn
+	};
+	let backgroundAnimState = { startTime: null };
+	let currentPlayback = {
+		scheduledNodes: [],
+		animationFrameId: null
+	};
+	// --- NEW: Performance Tracking State ---
+	let detectedFrameTime = 1000 / 60; // Default to 60fps (16.67ms)
+	let droppedFrames = 0;
+	let lastRafTime = 0;
+
+
+	let currentBoxIndex = 0
+	let textBoxes = [{
+		rawText: '',
+		soundPack: 'undertale_text',
+		portraits: {},
+		delayMode: 'deltarune',
+		ignoreChars: ' .*,?!',
+		timePerChar: 33.33,
+		playEveryN: 1,
+		mode: 'Undertale',
+		minPitch: 1,
+		maxPitch: 1,
+		delayAfter: 500,
+	}];
+
+	/* ----- Init UI ------ */
+
+	async function init() {
+
+		const storageKey = 'textboxSfxSync_savedText';
+		const savedText = localStorage.getItem(storageKey);
+
+		// If saved text exists, put it in the textarea.
+		if (savedText) {
+			// NEW: Load saved textboxes if they exist
+			try {
+				textBoxes = JSON.parse(savedText);
+				currentBoxIndex = 0;
+			} catch (e) {
+				textBoxes[0].rawText = savedText; // Fallback for old format
+			}
+		}
+
+		try {
+			const response = await fetch('./soundpacks.json');
+			if (!response.ok) throw new Error('Failed to load soundpacks.json');
+			soundPacks = await response.json();
+		} catch (error) {
+			console.error("Error loading sound packs:", error);
+			status.textContent = 'Error: Could not load soundpacks.json';
+			return;
+		}
+
+		// Preload all portraits for all textboxes
+		await preloadAllUsedPortraits();
+
+		for (const k in soundPacks) soundPackSelect.add(new Option(soundPacks[k].name, k));
+
+
+		// Use the VisualViewport API for more reliable mobile resizing
+		if (window.visualViewport) {
+			window.visualViewport.addEventListener('resize', adjustMobileResize);
+			//window.visualViewport.addEventListener('scroll', adjustFixedCanvasPosition);
+
+		} else {
+			window.addEventListener('resize', adjustMobileResize);
+		}
+		adjustMobileResize(); // Initial call
+
+		// Add listener for text changes to update the static preview
+		// inputText.addEventListener('input', updateOnTextInput); // Replaced by WYSIWYG onUpdate
+
+		// --- NEW: Save text to localStorage on any input ---
+		// This listens for any change and immediately saves the new value.
+		document.addEventListener('input', () => {
+			localStorage.setItem(storageKey, JSON.stringify(textBoxes));
+		});
+		// --- END NEW ---
+
+		// --- NEW: Start refresh rate detection ---
+		detectRefreshRate();
+		updateOnTextInput()
+
+		// --- WYSIWYG Init ---		
+		wysiwyg = new WysiwygEditor({
+			toggleId: 'wysiwyg-toggle',
+			rawEditorId: 'inputText',
+			wysiwygEditorId: 'wysiwyg-editor',
+			paletteId: 'color-palette',
+			recentColorsContainerId: 'recent-colors',
+			customColorPickerId: 'color-picker',
+			delaySelectId: 'insert-delay-select',
+			delayInsertBtnId: 'insert-delay-btn',
+			effectSelectId: 'insert-effect-select',
+			effectInsertBtnId: 'insert-effect-btn',
+			onUpdate: () => {
+				saveCurrentTextBoxState();
+				updateOnTextInput(true);
+			}
+		});
+
+
+		// --- Textbox Navigation ---
+		previousTextBoxButton.addEventListener('click', () => navigateTextBox(-1));
+		nextTextBoxButton.addEventListener('click', () => navigateTextBox(1));
+		addTextBoxButton.addEventListener('click', addTextBox);
+		deleteTextBoxButton.addEventListener('click', deleteTextBox);
+
+		loadTextBoxState(currentBoxIndex); // Initial load
+
+	}
+
+	async function preloadAllUsedPortraits() {
+		const usedPackKeys = [...new Set(textBoxes.map(box => box.soundPack))];
+		const allImagePromises = [];
+
+		usedPackKeys.forEach(packKey => {
+			const pk = soundPacks[packKey];
+			if (!pk?.images) return;
+
+			pk.images.forEach(imgData => {
+				const basePath = `./characters/${packKey}/images/`;
+				[imgData.image, imgData.imageMouth].forEach(imageName => {
+					if (!imageName) return;
+					const imagePath = basePath + imageName;
+					if (!imageCache[imagePath]) { // Only load if not already in cache
+						const promise = new Promise(resolve => {
+							const imgEl = new Image();
+							imgEl.onload = resolve;
+							imgEl.onerror = resolve; // Don't block forever on error
+							imgEl.src = imagePath;
+							imageCache[imagePath] = imgEl;
+						});
+						allImagePromises.push(promise);
+					}
+				});
+			});
+		});
+
+		await Promise.all(allImagePromises);
+		console.log('All used portraits have been preloaded.');
+	}
+
+
+	function saveCurrentTextBoxState() {
+		if (!textBoxes[currentBoxIndex]) return;
+
+		const packKey = soundPackSelect.value;
+		const pack = soundPacks[packKey];
+		let portraitsToSave = {};
+
+		// Only save portraits if the selected pack has them.
+		if (pack && pack.images && pack.images.length > 0) {
+			portraitsToSave = { ...selectedPortraits }; // Important to clone
+		}
+
+		textBoxes[currentBoxIndex] = {
+			rawText: wysiwyg.getText(),
+			soundPack: packKey,
+			portraits: portraitsToSave,
+			delayMode: delayModeSelect.value,
+			ignoreChars: ignoreChars.value,
+			timePerChar: parseFloat(timePerChar.value),
+			playEveryN: parseInt(playEveryN.value, 10),
+			mode: modeSelect.value,
+			minPitch: parseFloat(minPitch.value),
+			maxPitch: parseFloat(maxPitch.value),
+			delayAfter: parseFloat(delayAfterInput.value, 10),
+		};
+		localStorage.setItem('textboxSfxSync_savedText', JSON.stringify(textBoxes));
+	}
+
+	function loadTextBoxState(index) {
+		currentBoxIndex = index;
+		const data = textBoxes[index];
+		if (!data) return;
+
+		// Update UI elements
+
+
+
+
+
+
+
+		wysiwyg.setText(data.rawText);
+
+		soundPackSelect.value = data.soundPack;
+		delayModeSelect.value = data.delayMode;
+		ignoreChars.value = data.ignoreChars;
+		timePerChar.value = data.timePerChar;
+		playEveryN.value = data.playEveryN;
+		modeSelect.value = data.mode;
+		minPitch.value = data.minPitch;
+		maxPitch.value = data.maxPitch;
+		delayAfterInput.value = data.delayAfter;
+
+		updatePackUI(); // This will re-render portraits based on the loaded state
+		updateUIMode();
+		updateNavButtons();
+	}
+
+	function navigateTextBox(direction) {
+		saveCurrentTextBoxState();
+		const newIndex = currentBoxIndex + direction;
+		if (newIndex >= 0 && newIndex < textBoxes.length) {
+			loadTextBoxState(newIndex);
+		}
+	}
+
+	function addTextBox() {
+		saveCurrentTextBoxState();
+
+		const currentTextBox = textBoxes[currentBoxIndex];
+
+		// Create a new textbox by copying settings from the current one.
+		const newTextBox = JSON.parse(JSON.stringify(currentTextBox));
+		newTextBox.rawText = '';
+
+		textBoxes.push(newTextBox);
+		loadTextBoxState(textBoxes.length - 1);
+	}
+
+	function deleteTextBox() {
+		if (textBoxes.length <= 1) return;
+		textBoxes.splice(currentBoxIndex, 1);
+		const newIndex = Math.min(currentBoxIndex, textBoxes.length - 1);
+		loadTextBoxState(newIndex);
+	}
+
+	function updateNavButtons() {
+		previousTextBoxButton.disabled = currentBoxIndex === 0;
+		nextTextBoxButton.disabled = currentBoxIndex === textBoxes.length - 1;
+		deleteTextBoxButton.disabled = textBoxes.length <= 1;
+		textBoxCounter.textContent = `${currentBoxIndex + 1} / ${textBoxes.length}`;
+	}
+
+	/**
+	 * Estimates the monitor's refresh rate by sampling requestAnimationFrame calls.
+	 * This provides a target frame time for the frame drop detection logic.
+	 */
+	function detectRefreshRate() {
+		let frameCount = 0;
+		const totalFramesToSample = 240;
+		let firstTime = 0;
+		let lastTime = 0;
+		// Create a new element to display the performance info without overwriting the main status.
+		const perfStatusEl = document.createElement('div');
+		perfStatusEl.className = 'small';
+		perfStatusEl.style.marginTop = '4px';
+		$('status').parentNode.appendChild(perfStatusEl);
+
+		function sampleLoop(time) {
+			if (frameCount === 0) {
+				firstTime = time;
+			}
+			lastTime = time;
+
+			frameCount++;
+			if (frameCount < totalFramesToSample) {
+				requestAnimationFrame(sampleLoop);
+			} else {
+				const totalTime = lastTime - firstTime;
+				// Use frameCount - 1 because we are measuring intervals between frames
+				detectedFrameTime = totalTime / (totalFramesToSample - 1);
+				const detectedFps = 1000 / detectedFrameTime;
+				perfStatusEl.textContent = `Detected ~${Math.round(detectedFps)}Hz refresh rate. (Target frame time: ${detectedFrameTime.toFixed(2)}ms)`;
+				console.log(`Refresh rate detection complete. Avg frame time: ${detectedFrameTime}ms (~${detectedFps} FPS)`);
+			}
+		}
+		requestAnimationFrame(sampleLoop);
+	}
+
+	function adjustFixedCanvasPosition() {
+		// This function handles the on-screen keyboard on mobile.
+		// When the keyboard appears, the visual viewport is scrolled.
+		// We adjust the 'top' of our fixed canvas to match this scroll,
+		// ensuring it stays at the top of the visible area and doesn't
+		// cover the text input area.
+		if (window.visualViewport && canvasFixedContainer) {
+			const keyboardOffset = window.visualViewport.offsetTop;
+			canvasFixedContainer.style.top = `${keyboardOffset}px`;
+		}
+	}
+
+
+	function adjustMobileResize() {
+		if (optionsPanel) {
+			// Use visualViewport.height for a more accurate visible area on mobile,
+			// falling back to innerHeight for older browsers.
+			const availableHeight = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+			const panelHeight = availableHeight - canvasFixedContainer.offsetHeight;
+
+			if (panelHeight > 0) {
+				optionsPanel.style.height = `${panelHeight}px`;
+			}
+		}
+	}
+
+	// Populate delay and effect dropdowns
+	(function populateWysiwygDropdowns() {
+		const delaySelect = $('insert-delay-select');
+		for (const key in deltaruneDelayMap) {
+			delaySelect.add(new Option(`^${key} (${deltaruneDelayMap[key] * 33.33}ms)`, `^${key}`));
+		}
+
+		const effectSelect = $('insert-effect-select');
+		funnyTexts.forEach((ft, index) => {
+			effectSelect.add(new Option(ft.name, `\\\\O${index}`));
+		});
+	})();
+
+	// Modify text input handler to only update WYSIWYG if it's active
+	function updateOnTextInput(fromWysiwyg = false) {
+		if (!fromWysiwyg && wysiwyg) {
+			wysiwyg.setText(textBoxes[currentBoxIndex]?.rawText || '');
+		}
+
+		const raw_txt = textBoxes[currentBoxIndex].rawText;
+		const { timeline, soundEvents, duration } = parseTextToTimeline(raw_txt);
+
+		renderStaticPreview(timeline);
+	}
+
+
+
+
+	function updateHtmlPortraitPreview() {
+		portraitPreview.innerHTML = ''; // Clear previous images
+		const packKey = soundPackSelect.value;
+
+		if (Object.keys(selectedPortraits).length === 0) {
+			portraitPreview.textContent = 'P';
+			return;
+		}
+
+		for (const type in selectedPortraits) {
+			const imgData = selectedPortraits[type];
+			if (!imgData) continue;
+
+			const img = document.createElement('img');
+			img.src = `./characters/${packKey}/images/${imgData.image}`;
+			img.style.left = `${imgData.imageWidthOffset || 0}px`;
+			img.style.top = `${imgData.imageHeightOffset || 0}px`;
+			portraitPreview.appendChild(img);
+		}
+	}
+
+
+	async function updatePackUI() {
+		// FIX: Read the pack key directly from the UI element that was just changed.
+		const packKey = soundPackSelect.value;
+		const currentData = textBoxes[currentBoxIndex];
+		soundPackSelect.value = packKey; // Ensure dropdown is synced
+		const pk = soundPacks[packKey];
+
+		// Reset selections and UI
+		portraitSelectionContainer.innerHTML = '';
+		selectedPortraits = { ...currentData.portraits }; // Use saved portraits
+
+		// Apply defaults from the newly selected pack, falling back to global defaults or current data
+		timePerChar.value = pk.defaultTimePerChar ?? GLOBAL_DEFAULT_TIME_PER_CHAR;
+		minPitch.value = pk.defaultMinPitch ?? GLOBAL_DEFAULT_MIN_PITCH;
+		maxPitch.value = pk.defaultMaxPitch ?? GLOBAL_DEFAULT_MAX_PITCH;
+		playEveryN.value = pk.playEveryN ?? GLOBAL_DEFAULT_PLAY_EVERY_N;
+		modeSelect.value = currentData.mode;
+
+
+
+		// If the new pack has no images, clear the selected portraits.
+		if (!pk?.images || pk.images.length === 0) {
+			selectedPortraits = {};
+			saveCurrentTextBoxState()
+			// Display message when no portraits are available
+			portraitSelectionContainer.innerHTML = `<div class="portrait-preview-status"><span class="small">(No portraits in this pack)</span></div>`;
+			updateHtmlPortraitPreview();
+			renderStaticPreview(); // Update canvas even if there are no portraits
+			return;
+		}
+
+		// --- 1. Setup Status Bar (Current Selection Preview) ---
+		const statusBar = document.createElement('div');
+		statusBar.className = 'portrait-preview-status';
+
+		const previewImagesContainer = document.createElement('div');
+		previewImagesContainer.id = 'currentPortraitPreview';
+		previewImagesContainer.style.display = 'flex';
+		previewImagesContainer.style.gap = '5px';
+		statusBar.appendChild(previewImagesContainer);
+
+		const triggerButton = document.createElement('button');
+		triggerButton.textContent = 'Select/Change Portraits';
+		triggerButton.style.flexGrow = '1';
+		triggerButton.style.padding = '5px 10px';
+		triggerButton.style.background = '#2b2f32';
+		triggerButton.style.color = 'var(--text)';
+		triggerButton.style.border = 'none'; // Overridden by .portrait-preview-status button style
+		triggerButton.style.fontWeight = '500';
+		statusBar.appendChild(triggerButton);
+
+		portraitSelectionContainer.appendChild(statusBar);
+
+
+		// --- 2. Setup Pop-up Panel (The Selector) ---
+		optionsPanel = document.createElement('div');
+		optionsPanel.className = 'portrait-dropdown-panel';
+		optionsPanel.style.display = 'none';
+
+		// NEW: Add a close button for mobile view
+		const closeButton = document.createElement('button');
+		closeButton.textContent = 'X';
+		closeButton.className = 'close-btn';
+		closeButton.setAttribute('aria-label', 'Close portrait selector');
+		closeButton.onclick = (e) => {
+			e.preventDefault();
+			e.stopPropagation();
+			optionsPanel.style.display = 'none';
+		};
+		optionsPanel.appendChild(closeButton);
+		// END NEW
+
+		portraitSelectionContainer.appendChild(optionsPanel);
+
+		triggerButton.onclick = (e) => {
+			e.preventDefault();
+			e.stopPropagation(); // Prevent document click hiding immediately
+			const isHidden = optionsPanel.style.display === 'none';
+			optionsPanel.style.display = isHidden ? 'block' : 'none';
+
+		};
+
+		// Hide popup if clicking outside
+		document.addEventListener('click', (e) => {
+			if (!portraitSelectionContainer.contains(e.target) && optionsPanel.style.display !== 'none') {
+				optionsPanel.style.display = 'none';
+			}
+		});
+
+
+
+		// --- 3. Pre-cache Images ASYNCHRONOUSLY ---
+		const imageLoadPromises = [];
+		pk.images.forEach(imgData => {
+			const basePath = `./characters/${packKey}/images/`;
+
+			[imgData.image, imgData.imageMouth].forEach(imageName => {
+				if (!imageName) return;
+				const imagePath = basePath + imageName;
+				if (!imageCache[imagePath]) {
+					const promise = new Promise(resolve => {
+						const imgEl = new Image();
+						imgEl.onload = resolve;
+						imgEl.onerror = resolve; // Resolve on error too to avoid blocking forever
+						imgEl.src = imagePath;
+						imageCache[imagePath] = imgEl;
+					});
+					imageLoadPromises.push(promise);
+				}
+			});
+		});
+
+
+		// --- 4. Group Images and Build Selection UI ---
+		const groupedImages = pk.images.reduce((acc, img, index) => {
+			const type = img.type ?? 0;
+			if (!acc[type]) { acc[type] = []; }
+			acc[type].push({ ...img, originalIndex: index });
+			return acc;
+		}, {});
+
+
+		const renderCurrentSelectionPreview = () => {
+			previewImagesContainer.innerHTML = '';
+			Object.values(selectedPortraits).forEach(imgData => {
+				if (imgData) {
+					const img = document.createElement('img');
+					img.className = 'current-portrait-img';
+					// Use the cached image directly for status preview
+					const imgPath = `./characters/${packKey}/images/${imgData.image}`;
+					img.src = imageCache[imgPath]?.src || imgPath;
+					previewImagesContainer.appendChild(img);
+				}
+			});
+			if (Object.keys(selectedPortraits).length === 0) {
+				previewImagesContainer.textContent = '';
+			}
+		};
+
+
+		const createPortraitOptions = (container, images, packKey, type) => {
+			const categories = images.reduce((acc, img) => {
+				const category = img.category || 'Default';
+				if (!acc[category]) {
+					acc[category] = [];
+				}
+				acc[category].push(img);
+				return acc;
+			}, {});
+
+			const hasMultipleCategories = Object.keys(categories).length > 1 || !categories['Default'];
+
+			for (const categoryName in categories) {
+				const categoryImages = categories[categoryName];
+				let targetContainer = container;
+
+				if (hasMultipleCategories) {
+					const categoryFieldset = document.createElement('fieldset');
+					categoryFieldset.className = 'portrait-group';
+					categoryFieldset.innerHTML = `<legend>${categoryName}</legend>`;
+					container.appendChild(categoryFieldset);
+					targetContainer = categoryFieldset;
+				}
+
+				const fieldset = document.createElement('fieldset');
+				fieldset.className = 'portrait-group';
+
+				const legend = document.createElement('legend');
+				legend.textContent = `Type ${type}`;
+				fieldset.appendChild(legend);
+
+				const optionsDiv = document.createElement('div');
+				optionsDiv.className = 'portrait-options';
+
+				// Add a "none" option
+				const noneId = `portrait-${packKey}-${type}-none`;
+				const noneRadio = document.createElement('input');
+				noneRadio.type = 'radio';
+				noneRadio.name = `portrait-type-${type}`;
+				noneRadio.id = noneId;
+				noneRadio.value = 'none';
+
+				const noneLabel = document.createElement('label');
+				noneLabel.htmlFor = noneId;
+				noneLabel.className = 'portrait-label'
+				noneLabel.textContent = '(None)';
+
+				noneRadio.addEventListener('change', () => {
+					delete selectedPortraits[type];
+					updateHtmlPortraitPreview();
+					saveCurrentTextBoxState();
+					renderCurrentSelectionPreview();
+					renderStaticPreview(); // Update canvas preview on change
+				});
+
+				optionsDiv.appendChild(noneRadio);
+				optionsDiv.appendChild(noneLabel);
+
+				let defaultSelected = false;
+				const savedSelectionForType = selectedPortraits[type];
+
+				// Add options for each image in the group
+				categoryImages.forEach((imgData, i) => {
+					const radioId = `portrait-${packKey}-${type}-${imgData.originalIndex}`;
+					const radio = document.createElement('input');
+					radio.type = 'radio';
+
+					// --- FIX: Prioritize saved selection over pack default ---
+					// Check if the current image is the one saved in the textbox data.
+					radio.checked = savedSelectionForType && savedSelectionForType.image === imgData.image;
+
+					radio.name = `portrait-type-${type}`;
+					radio.id = radioId;
+					radio.value = imgData.originalIndex;
+
+					const label = document.createElement('label');
+					label.htmlFor = radioId;
+
+					const imgPath = `./characters/${packKey}/images/${imgData.image}`;
+					const previewImg = document.createElement('img');
+					previewImg.src = imgPath;
+					label.appendChild(previewImg);
+
+					optionsDiv.appendChild(radio);
+					optionsDiv.appendChild(label);
+
+					// If no portrait is saved for this type, then check for a pack default.
+					if (!savedSelectionForType && imgData.default && !defaultSelected) {
+						radio.checked = true;
+						selectedPortraits[type] = pk.images[imgData.originalIndex];
+						defaultSelected = true;
+					}
+
+					radio.addEventListener('change', () => {
+						if (radio.checked) {
+							selectedPortraits[type] = pk.images[parseInt(radio.value)];
+							updateHtmlPortraitPreview();
+							saveCurrentTextBoxState();
+							renderCurrentSelectionPreview();
+							renderStaticPreview(); // Update canvas preview on change
+						}
+					});
+				});
+
+				// If no portrait was saved for this type and no default was found in the pack,
+				// then check the "none" option.
+				if (!savedSelectionForType && !defaultSelected) {
+					noneRadio.checked = !selectedPortraits[type];
+				}
+
+				fieldset.appendChild(optionsDiv);
+				targetContainer.appendChild(fieldset);
+			}
+		};
+
+		await Promise.all(imageLoadPromises);
+		for (const type in groupedImages) {
+			const images = groupedImages[type];
+			createPortraitOptions(optionsPanel, images, packKey, type);
+		}
+		
+		renderCurrentSelectionPreview();
+		updateHtmlPortraitPreview();
+		saveCurrentTextBoxState(); // Save state AFTER UI and selectedPortraits are updated
+		renderStaticPreview();
+	}
+
+	soundPackSelect.addEventListener('change', async () => {
+		// First, clear the current `selectedPortraits`.
+		const packKey = soundPackSelect.value;
+		const pk = soundPacks[packKey];
+		selectedPortraits = {}; // Clear current selection
+
+		// If the new pack has images, find the default for each type.
+		if (pk && pk.images) {
+			pk.images.forEach(imgData => {
+				if (imgData.default) {
+					const type = imgData.type ?? 0;
+					selectedPortraits[type] = imgData;
+				}
+			});
+		}
+
+		textBoxes[currentBoxIndex].portraits = { ...selectedPortraits };
+		updatePackUI();
+		saveCurrentTextBoxState(); // Save the new state with the default portrait.
+	});
+
+	modeSelect.addEventListener('change', () => {
+		saveCurrentTextBoxState();
+		updateUIMode();
+	});
+
+
+	function updateUIMode() {
+		const ctx = canvas.getContext('2d');
+		if (modeSelect.value == 'gameboard') {
+			canvas.width = 384 * resFactor
+			canvas.height = 86 * resFactor
+			shader.width = 384 * resFactor
+			shader.height = 86 * resFactor;
+			// lastSoundPack = textBoxes[currentBoxIndex].soundPack;
+			soundPackSelect.value = 'board'
+
+			// Hide the base canvas and show the shader canvas
+			shaderCanvas.style.display = 'block';
+
+		}
+		else {
+			canvas.width = 594 * resFactor //  593 add a single pixel for ffmpeg
+			canvas.height = 168 * resFactor // 167
+			shader.width = 594 * resFactor
+			shader.height = 168 * resFactor
+			// if (soundPackSelect.value == 'board') {
+			//		soundPackSelect.value = lastSoundPack;
+			//}
+
+			// Show the base canvas and hide the shader canvas
+			shaderCanvas.style.display = 'none';
+		}
+
+		renderStaticPreview(); // Update canvas on mode change
+	}
+
+	[delayModeSelect, ignoreChars, timePerChar, minPitch, maxPitch, playEveryNInput, modeSelect, delayAfterInput].forEach(el => {
+		el.addEventListener('change', saveCurrentTextBoxState);
+		if (el.type === 'text' || el.type === 'number') {
+			el.addEventListener('input', saveCurrentTextBoxState);
+		}
+	});
+	/* ----- Helper: load sample ----- */
+	async function loadSample(packKey, file) {
+		const cacheKey = `${packKey || 'direct'}:${file}`;
+		if (audioBufferCache[cacheKey]) return audioBufferCache[cacheKey];
+		try {
+			const url = packKey ? `./sounds/${file}` : file;
+			const res = await fetch(url);
+			if (!res.ok) throw new Error('Not found:' + file);
+			const ab = await res.arrayBuffer();
+			const dec = await decoderCtx.decodeAudioData(ab.slice(0));
+			audioBufferCache[cacheKey] = dec;
+			return dec;
+		} catch (e) {
+			console.warn('loadSample fail', e);
+			return null;
+		}
+	}
+
+	/* ----- New Feature: Effects Timeline ----- */
+	/* ----- Text Parsing and Unified Timeline/Event Building ----- */
+	function parseTextToTimeline(rawText, boxData) {
+		// --- Get UI settings once at the start ---
+		const currentData = boxData || textBoxes[currentBoxIndex]; // Fallback for safety
+		const tpcValue = (currentData.timePerChar ?? GLOBAL_DEFAULT_TIME_PER_CHAR) / 1000;
+		const ignored = (currentData.ignoreChars ?? ' .*,?!').split('').map(x => x.toLowerCase());
+		const playEveryN = Math.max(1, currentData.playEveryN ?? GLOBAL_DEFAULT_PLAY_EVERY_N);
+
+		// --- State variables for the unified parsing loop ---
+		const timeline = [];
+		const soundEvents = [];
+		let time = 0;
+		let soundCharCounter = 0;
+		let i = 0; // The main index for iterating through rawText
+
+		let newLineer = 0;
+		let whenToNewline = 26;
+		let lastSpaceIndex = -1; // Tracks the index in the *timeline* array
+		let asterskip = false;
+
+		// Determine line-wrapping threshold based on mode
+		if (Object.keys(currentData.portraits).length === 0) {
+			whenToNewline = 33;
+		}
+		if (currentData.mode == 'gameboard') {
+			whenToNewline = 22;
+		}
+		whenToNewline++ // Plus one added for combatility reasons. This is done seperately so I can comment on it. So don't remove this
+
+		if (rawText.length > 0 && rawText[0] === '*') {
+			asterskip = true;
+		}
+
+		// --- The main parsing loop ---
+		while (i < rawText.length) {
+			let char = rawText[i];
+			let consumed = 1;
+
+			// --- Handle automatic line wrapping ---
+			// This logic now inserts a 'newline' effect directly into the timeline
+			if (newLineer >= whenToNewline && lastSpaceIndex !== -1) {
+				// Find the character item at the last space and replace it with a newline.
+				// This replicates the original behavior of replacing the space.
+				let timelineItem = timeline[lastSpaceIndex];
+				if (timelineItem && timelineItem.type === 'char' && timelineItem.char === ' ') {
+					// Replace the space character object with a newline object
+					timeline[lastSpaceIndex] = { type: 'newline', time: timelineItem.time + tpcValue };
+
+					// --- ADDED: asterskip logic for auto-wrap ---
+					if (asterskip) {
+						const insertTime = timelineItem.time; // Use time of the replaced space
+						timeline.splice(lastSpaceIndex + 1, 0,
+							{ type: 'char', char: '|', time: insertTime },
+							{ type: 'char', char: '|', time: insertTime }
+						);
+					}
+					// --- END ADDED ---
+				}
+
+
+				// Adjust newLineer based on the position of the inserted newline.
+				// This will correctly count the inserted '|' characters for the new line's length.
+				let charsAfterWrap = 0;
+				for (let j = lastSpaceIndex + 1; j < timeline.length; j++) {
+					if (timeline[j].type === 'char') {
+						charsAfterWrap++;
+					}
+					if (timeline[j].type === 'funnytext') {
+						const spriteData = funnyTexts[timeline[j].funnyindex];
+						charsAfterWrap += Math.ceil(spriteData.frameWidth / 16);
+					}
+				}
+				newLineer = charsAfterWrap;
+
+				lastSpaceIndex = -1; // Reset after use
+			}
+
+			if (rawText[i - 1] != '`') {
+				// --- Handle control codes and characters ---
+				if (char === '^') { // Delay codes
+					let delayAmount = 0;
+					if (currentData.delayMode === 'deltarune') {
+						const nxt = rawText[i + 1];
+						if (nxt && deltaruneDelayMap[nxt]) {
+							delayAmount = ((deltaruneDelayMap[nxt] * 33.33) / 1000) + 0.09999; //IT HAS A THREE FRAME DELAY FOR SOME REASON GAMEMAKER GRRR!
+							timeline.push({ type: 'delay', value: `^${nxt}`, time: time });
+							consumed = 2;
+						}
+					} else { // Milliseconds mode
+						const match = rawText.substring(i + 1).match(/^[0-9.]+/);
+						if (match) {
+							timeline.push({ type: 'delay', value: match[0], time: time });
+							delayAmount = parseFloat(match[0]) / 1000;
+							consumed = 1 + match[0].length;
+						}
+					}
+					if (delayAmount > 0) {
+						time += delayAmount;
+					}
+					i += consumed;
+					continue; // Skip the rest of the loop
+				}
+				else if (char === '\\' && i + 1 < rawText.length) { // Escape sequences
+					const nextChar = rawText[i + 1];
+					const nextnextChar = rawText[i + 2];
+					const nextnextnextChar = rawText[i + 3];
+					let codeProcessed = false;
+
+					const colorCodeMap = { 'R': '#ff0000', 'B': '#0000ff', 'Y': '#ffff00', 'G': '#00ff00', 'P': '#800080', 'X': '#000000', 'M': '#800000', 'O': '#ffa040', 'A': '#00AEFF', 'S': '#FF80FF', 'V': '#80FF80', 'I': '#81C0FF', 'W': 'clear' };
+
+					if (nextChar === 'n') {
+						timeline.push({ type: 'newline', time: time });
+						// --- ADDED: asterskip logic for explicit \n ---
+						if (asterskip) {
+							timeline.push({ type: 'char', char: '|', time: time });
+							timeline.push({ type: 'char', char: '|', time: time });
+						}
+						newLineer = 0; // Per original logic, always resets to 0 here
+						// --- END ADDED ---
+						lastSpaceIndex = -1;
+						consumed = 2; codeProcessed = true;
+					} else if (nextChar === '\\' && nextnextChar === 'c') {
+						if (colorCodeMap[nextnextnextChar]) {
+							timeline.push({ type: 'color', value: colorCodeMap[nextnextnextChar], time: time });
+							consumed = 4; codeProcessed = true;
+						} else if (nextnextnextChar === '#' && i + 9 < rawText.length) {
+							const hex = rawText.substring(i + 4, i + 10);
+							if (/^[0-9a-fA-F]{6}$/.test(hex)) {
+								timeline.push({ type: 'color', value: `#${hex}`, time: time });
+								consumed = 10; codeProcessed = true;
+							}
+						}
+					} else if (nextChar === '\\' && nextnextChar === 'O') {
+						let funnyindex = parseInt(nextnextnextChar);
+						const spriteData = funnyTexts[funnyindex];
+						if (!isNaN(funnyindex) && spriteData) {
+							// Add visual event to the timeline
+							timeline.push({ type: 'funnytext', funnyindex: funnyindex, animation: { startTime: null }, time: time });
+
+							// NEW: Add a sound event if a sound file is defined
+							if (spriteData.file) {
+								soundEvents.push({ time: time, file: spriteData.file });
+							}
+
+							newLineer += Math.ceil(spriteData.frameWidth / 16); // Approximate character width
+							consumed = 4; codeProcessed = true;
+						}
+					}
+
+					if (!codeProcessed) {
+						// Not a special code, treat '\' as a literal character
+						char = '\\';
+					} else {
+						i += consumed;
+						continue;
+					}
+				}
+				else if (char === '&' || char === '\n') {
+					timeline.push({ type: 'newline', time: time });
+					// --- ADDED: asterskip logic for explicit & or newline character ---
+					if (asterskip) {
+						timeline.push({ type: 'char', char: '|', time: time });
+						timeline.push({ type: 'char', char: '|', time: time });
+					}
+					newLineer = 0; // Per original logic, always resets to 0 here
+					// --- END ADDED ---
+					lastSpaceIndex = -1;
+					i += 1; continue;
+				}
+				else if (char === '/') {
+					timeline.push({ type: 'halt', time: time });
+					if (rawText[i + 1] === '%') {
+						timeline.push({ type: 'end', time: time });
+						consumed = 2;
+					}
+					i += consumed; continue;
+				}
+				else if (char === '%') {
+					timeline.push({ type: 'nextbox', time: time });
+					i += 1; continue;
+				}
+				else if (char === '`') {
+					i += 1; continue;
+				}
+			}
+
+
+			// --- Default: Process as a displayable character ---
+			if (char === ' ') {
+				lastSpaceIndex = timeline.length;
+			}
+
+			// Add character to the visual timeline
+			timeline.push({ type: 'char', char: char, time: time });
+
+			// Check if a sound event should be generated
+			const chLower = char.toLowerCase();
+			const shouldCountForSound = !ignored.includes(chLower) && char !== '|';
+			if (shouldCountForSound) {
+				if ((soundCharCounter % playEveryN) === 0) {
+					soundEvents.push({ time: time, char: chLower, raw: char });
+				}
+				soundCharCounter++;
+			}
+
+			// Increment state for the next character
+			newLineer++;
+			if (char !== '|') {
+				time += tpcValue;
+			}
+			i += consumed;
+		}
+
+		return { timeline, soundEvents, duration: time };
+	}
+
+	/* ----- Audio Loading and Scheduling ----- */
+	async function loadBuffersForPack(packKey, events) {
+		let promises = [];
+
+		// If packKey is null, it means we're loading direct-file sounds (like from funnytext)
+		if (packKey === null) {
+			const directFileEvents = events.filter(ev => ev.file && !ev.packKey);
+			const uniqueFiles = [...new Set(directFileEvents.map(ev => ev.file))];
+			uniqueFiles.forEach(file => promises.push(loadSample(undefined, file)));
+		} else {
+			const pack = soundPacks[packKey];
+			if (!pack) return Promise.resolve();
+
+			const packEvents = events.filter(e => e.packKey === packKey);
+
+			if (pack.type === 'single') {
+				promises.push(loadSample(packKey, pack.file));
+			} else if (pack.type === 'multi') {
+				const chars = [...new Set(packEvents.map(e => e.file.replace('.wav', '')))];
+				chars.forEach(c => promises.push(loadSample(packKey, `${c}.wav`)));
+			} else if (pack.type === 'random') {
+				[...new Set(packEvents.map(e => e.file))].forEach(f => promises.push(loadSample(packKey, f)));
+			}
+			if (pack.finishSound) {
+				promises.push(loadSample(packKey, pack.finishSound));
+			}
+		}
+
+		return Promise.all(promises);
+	}
+
+
+
+
+	/* ----- Canvas and Animation ----- */
+
+	function computeStyleForCanvas() {
+		const previewComputed = window.getComputedStyle(htmlPreview);
+		const txtComputed = window.getComputedStyle(textPreview);
+		return {
+			boxBg: previewComputed.backgroundColor || '#000000',
+			textColor: txtComputed.color || '#ffffff',
+			fontFamily: txtComputed.fontFamily || 'monospace',
+			fontSize: parseFloat(txtComputed.fontSize) || 18,
+			padding: parseFloat(txtComputed.padding) || 12,
+		};
+	}
+
+	function drawAnimatedSprite(ctx, spriteData, startTime, currentTime, destX, destY, destW, destH) {
+		// Common guard clauses: Don't draw if animation hasn't started or the primary image isn't ready.
+		if (startTime === null || !spriteData.image || !spriteData.image.complete || spriteData.image.naturalWidth === 0) {
+			return;
+		}
+
+		// --- Unified Time and Frame Calculation ---
+		const elapsed = currentTime - startTime;
+		if (elapsed < 0) return;
+
+		const loopDuration = spriteData.totalFrames * spriteData.animationInterval;
+		let frameIndex;
+
+		if (spriteData.loop === false) { // Check for the new loop property
+			const timeInAnimation = Math.min(elapsed, loopDuration); // Clamp time to the end
+			frameIndex = Math.floor(timeInAnimation / spriteData.animationInterval);
+			frameIndex = Math.min(frameIndex, spriteData.totalFrames - 1); // Ensure it doesn't exceed max frames
+		} else {
+			const timeInLoop = elapsed % loopDuration;
+			frameIndex = Math.floor(timeInLoop / spriteData.animationInterval);
+		}
+		// --- End of Unified Logic ---
+
+		if (spriteData.isFolder) {
+			// Draw from an array of pre-loaded images
+			const frameImage = spriteData.images[frameIndex];
+
+
+			if (frameImage && frameImage.complete && frameImage.naturalWidth > 0) {
+				ctx.drawImage(frameImage, destX, destY, destW, destH);
+
+			}
+		} else {
+			// Draw from a single spritesheet
+			const sourceX = frameIndex * spriteData.frameWidth;
+			ctx.drawImage(
+				spriteData.image,
+				sourceX, 0, // Source x, y
+				spriteData.frameWidth, spriteData.frameHeight, // Source width, height
+				destX, destY, // Destination x, y
+				destW, destH // Destination width, height
+			);
+		}
+	}
+
+	function drawUndertaleBackground(ctx, boxX, boxY, boxW, boxH) {
+		ctx.fillStyle = '#ffffff';
+		ctx.fillRect(boxX, boxY, boxW, boxH);
+		ctx.fillStyle = '#000000';
+		const innerPadding = 6;
+		ctx.fillRect(boxX + innerPadding, boxY + innerPadding, boxW - (innerPadding * 2), boxH - (innerPadding * 2));
+	}
+	function drawDeltaruneBackground(ctx, boxX, boxY, boxW, boxH, startTime, CurrentTime) {
+		// Use the same constants and setup as Option 1...
+		const cornerSize = textboxSprite.frameWidth * 2;
+
+		const left = boxX;
+		const top = boxY;
+		const right = boxX + boxW;
+		const bottom = boxY + boxH;
+
+		// Draw solid background
+		ctx.fillStyle = '#000000';
+		ctx.fillRect(boxX + 20, boxY + 20, boxW - 40, boxH - 40);
+
+		// --- Draw Borders ---
+
+		// Sides (these don't need flipping)
+		const topWidth = boxW - cornerSize * 2;
+		const sideHeight = boxH - cornerSize * 2;
+		ctx.drawImage(textboxSpriteTop.image, left + cornerSize, top, topWidth, cornerSize); // Top
+
+		ctx.drawImage(textboxSpriteSides.image, left, top + cornerSize, cornerSize, sideHeight); // Left
+
+
+		// --- Draw Corners ---
+		// Here we use translate + scale to flip the corner in place, which is more intuitive.
+
+		// Top-Left
+		drawAnimatedSprite(ctx, textboxSprite, startTime, CurrentTime, left, top, cornerSize, cornerSize);
+
+		// Top-Right
+		ctx.save();
+		ctx.translate(right, top); // Move origin to the corner's position
+		ctx.scale(-1, 1); // Flip horizontally
+		drawAnimatedSprite(ctx, textboxSprite, startTime, CurrentTime, 0, 0, cornerSize, cornerSize); // Draw at the new origin
+		ctx.drawImage(textboxSpriteSides.image, 0, cornerSize, cornerSize, sideHeight); // Right
+		ctx.restore();
+
+		// Bottom-Left
+		ctx.save();
+		ctx.translate(left, bottom); // Move origin
+		ctx.scale(1, -1); // Flip vertically
+		drawAnimatedSprite(ctx, textboxSprite, startTime, CurrentTime, 0, 0, cornerSize, cornerSize); // Draw
+		ctx.drawImage(textboxSpriteTop.image, cornerSize, 0, topWidth, cornerSize); // Bottom
+		ctx.restore();
+
+		// Bottom-Right
+		ctx.save();
+		ctx.translate(right, bottom); // Move origin
+		ctx.scale(-1, -1); // Flip both
+		drawAnimatedSprite(ctx, textboxSprite, startTime, CurrentTime, 0, 0, cornerSize, cornerSize); // Draw
+		ctx.restore();
+	}
+
+	function drawPortraits(ctx, pX, pY, imagesToDraw, useMouthImage, isDarkWorld, packKey) {
+		let drawnImagesAmount = 0;
+		for (const imgData of imagesToDraw) {
+			let imageToRenderName = imgData.image;
+			if (useMouthImage && imgData.imageMouth) {
+				imageToRenderName = imgData.imageMouth;
+			}
+			const imgPath = `./characters/${packKey}/images/${imageToRenderName}`;
+			const img = imageCache[imgPath];
+			let x = pX;
+			let y = pY;
+			if (img && img.complete) {
+
+				let WidthOffset = imgData.imageWidthOffset || 0
+				let HeightOffset = imgData.imageHeightOffset || 0
+
+
+				if (WidthOffset === 0 && soundPacks[packKey].defaultOffset != undefined) {
+					WidthOffset = soundPacks[packKey].defaultOffset.x
+				}
+				if (HeightOffset === 0 && soundPacks[packKey].defaultOffset != undefined) {
+					HeightOffset = soundPacks[packKey].defaultOffset.y
+				}
+
+				
+				// This logic is preserved from the original function, where only the first
+				// portrait in Dark World mode gets a scaled offset.
+
+				if (isDarkWorld && soundPacks[packKey].lightWorldOffset === true) {
+					const DarkZone = 0.5;
+					x += ((WidthOffset || 0) * DarkZone);
+					y += ((HeightOffset || 0) * DarkZone);
+				}
+				else {
+					x += (WidthOffset || 0);
+					y += (HeightOffset || 0);
+				}
+				ctx.drawImage(img, x, y);
+				drawnImagesAmount++;
+			}
+		}
+	}
+
+	/**
+* A flexible, normalized easeOutElastic function that matches GML's logic.
+* @param {number} x The normalized time/progress (0.0 to 1.0).
+* @param {number} [amplitude=10] Controls the decay of the bounce. The default is 10.
+* @param {number} [period=0.3] Controls the frequency of the bounce. Smaller values are faster. The GML default is 0.3.
+* @returns {number} The eased value from 0.0 to 1.0.
+*/
+	function easeOutElastic(x, amplitude = 10, period = 0.3) {
+		if (x === 0) return 0;
+		if (x === 1) return 1;
+
+		// Based on the GML formula where duration is 1.0
+		const s = period / 4;
+
+		return (
+			Math.pow(2, -amplitude * x) *
+			Math.sin(((x - s) * (2 * Math.PI)) / period) +
+			1
+		);
+	}
+
+
+
+	function drawCanvasText(ctx, timelineItems, font, textStartX, textStartY, isStatic, currentTime, isDarkWorld) {
+		let lineHeight = font.charHeight - 6;
+		if (font.charHeight === 20) {
+			lineHeight = font.charHeight;
+		}
+		let currentX = textStartX;
+		let currentY = textStartY;
+		let currentColor = '';
+
+		// --- Create lists to hold drawing commands ---
+		const funnytextDraws = [];
+		const otherDraws = [];
+
+		// =================================================================
+		// PASS 1: Calculate positions and sort into drawing layers
+		// =================================================================
+		for (const item of timelineItems) {
+			switch (item.type) {
+				case 'newline':
+					currentX = textStartX;
+					currentY += lineHeight;
+					break;
+
+				case 'color':
+					currentColor = (item.value === 'clear') ? '' : item.value;
+					break;
+
+				case 'funnytext':
+					{ // Use a block to scope these constants
+						const spriteIndex = item.funnyindex;
+						const spriteData = loadedFunnyText[spriteIndex];
+						if (!spriteData) continue;
+
+						if (item.animation.startTime === null && !isStatic) {
+							item.animation.startTime = currentTime;
+						}
+						const wackY = (isDarkWorld) ? 4 + 5 : 4 + 5; // Magic Offset numbers.... sigh. The 5 is from the funnytext script in Deltarune. 8 is the darkworld text offset. 4 is magic
+						const wackX = 13
+						const spriteX = (typeof spriteData.imageWidthOffset === 'undefined') ? currentX + wackX : currentX + spriteData.imageWidthOffset + wackX;
+						const spriteY = (typeof spriteData.imageHeightOffset === 'undefined') ? currentY + wackY : currentY + spriteData.imageHeightOffset + wackY;
+
+						// Store the drawing command instead of executing it now
+						funnytextDraws.push({
+							spriteData,
+							item,
+							spriteX,
+							spriteY
+						});
+
+						currentX += spriteData.frameWidth; // Still advance the cursor
+						break;
+					}
+
+				case 'char':
+					{ // Use a block to scope these constants
+						let char = item.char;
+						const gap = font.charGap ?? 0;
+
+						if (char === "|") char = " ";
+
+						if (char !== ' ') {
+							let tTextX = currentX;
+							let tTextY = currentY;
+
+							// Store the drawing command for the character
+							otherDraws.push({
+								char,
+								x: tTextX,
+								y: tTextY,
+								font,
+								color: currentColor,
+								isDarkWorld
+							});
+						}
+						currentX += font.charWidth + gap; // Still advance the cursor
+						break;
+					}
+			}
+		}
+
+		// =================================================================
+		// PASS 2: Render the layers in the correct order
+		// =================================================================
+
+		// --- Render funnytext first (background layer) ---
+		for (const draw of funnytextDraws) {
+			const {
+				spriteData,
+				item,
+				spriteX,
+				spriteY
+			} = draw;
+
+			if (!isStatic && typeof spriteData.animationInterval !== 'undefined' || spriteData.staticImage === false) {
+				let drawX = spriteX;
+				let drawY = spriteY;
+
+				if (typeof spriteData.shake == 'undefined' || spriteData.shake) {
+					let shake = 2
+					if (spriteData.shake) {
+						shake + spriteData.shake
+					}
+
+					drawX += (Math.random() - 0.5) * (shake);
+					drawY += (Math.random() - 0.5) * (shake);
+				}
+
+
+
+
+				if (typeof spriteData.bounce == 'undefined' || spriteData.bounce) {
+					const elapsed = currentTime - item.animation.startTime;
+					const scaleAnimDuration = 333.33;
+					const t = Math.min(1.0, elapsed / scaleAnimDuration);
+					const scale = easeOutElastic(t, 10, 0.33);
+					const scaledWidth = spriteData.frameWidth * scale;
+					const scaledHeight = spriteData.frameHeight * scale;
+					const centeredOffsetX = (spriteData.frameWidth - scaledWidth) / 2;
+					const centeredOffsetY = (spriteData.frameHeight - scaledHeight) / 2;
+					drawAnimatedSprite(ctx, spriteData, item.animation.startTime, currentTime, drawX + centeredOffsetX, drawY + centeredOffsetY, scaledWidth, scaledHeight);
+				} else if (!spriteData.shake) {
+					drawAnimatedSprite(ctx, spriteData, item.animation.startTime, currentTime, drawX, drawY, spriteData.frameWidth, spriteData.frameHeight);
+				}
+				else {
+					drawAnimatedSprite(ctx, spriteData, item.animation.startTime, currentTime, drawX, drawY, spriteData.frameWdith, spriteData.frameHeight);
+				}
+			} else if (spriteData.image && spriteData.image.complete) {
+				// This is the static drawing path.
+				// We need to handle two cases:
+				// 1. A single image that should be scaled to the frame dimensions (like the 16x16 'Test' sprite).
+				// 2. A spritesheet where we only want to draw the first frame.
+
+				// If the image's natural width is larger than the frame width, it's a spritesheet.
+				if (spriteData.image.naturalWidth > spriteData.frameWidth) {
+					// It's a spritesheet, so clip the first frame.
+					ctx.drawImage(spriteData.image, 0, 0, spriteData.frameWidth, spriteData.frameHeight, spriteX, spriteY, spriteData.frameWidth, spriteData.frameHeight);
+				} else {
+					// It's a single image, so scale it up to the frame dimensions.
+					ctx.drawImage(spriteData.image, spriteX, spriteY, spriteData.frameWidth, spriteData.frameHeight);
+				}
+			}
+		}
+
+		// --- Render other text on top (foreground layer) ---
+		for (const draw of otherDraws) {
+			const {
+				char,
+				x,
+				y,
+				font,
+				color,
+				isDarkWorld
+			} = draw;
+
+			if (isDarkWorld) {
+				if (color === '') {
+					drawText(char, x + 1, y + 1, undertale_font_dw_b, ctx);
+				} else {
+					drawText(char, x + 1, y + 1, font, ctx, color, undefined, 0.3);
+				}
+			}
+			drawText(char, x, y, font, ctx, color, isDarkWorld);
+		}
+	}
+
+
+	function drawCanvasFrame(ctx, canvasEl, timelineItems, boxData, styleVars, isStatic = false, animationTime = 0) {
+		const imagesToDraw = Object.values(boxData.portraits);
+		const mode = boxData.mode;
+		const soundPack = boxData.soundPack;
+
+
+		let useMouthImage = false;
+		let font;
+		const currentTime = isStatic ? performance.now() : animationTime;
+
+		// --- 1. State & Mouth Animation Logic ---
+		if (!isStatic) {
+			// NEW: Count characters from the unified timeline
+			const charCount = timelineItems.filter(item => item.type === 'char').length;
+			const lastCharItem = timelineItems.slice().reverse().find(item => item.type === 'char');
+			const currentChar = lastCharItem ? lastCharItem.char : '';
+			const ignoredChars = (ignoreChars.value + '|' || '').split('').map(x => x.toLowerCase());
+
+			if (charCount > mouthAnimationState.prevCharCount) {
+				if (mouthAnimationState.buffer <= 0 && currentChar && !ignoredChars.includes(currentChar.toLowerCase())) {
+					if (!mouthAnimationState.isAnimating) {
+						mouthAnimationState.isAnimating = true;
+						mouthAnimationState.startTime = currentTime;
+					}
+				} else {
+					mouthAnimationState.buffer--;
+				}
+			}
+			mouthAnimationState.prevCharCount = charCount;
+			if (mouthAnimationState.isAnimating) {
+				const elapsed = currentTime - mouthAnimationState.startTime;
+				const MOUTH_OPEN_DURATION_MS = 167;
+				if (elapsed < MOUTH_OPEN_DURATION_MS) useMouthImage = true;
+				const ANIMATION_CYCLE_MS = 300;
+				if (elapsed >= ANIMATION_CYCLE_MS) mouthAnimationState.isAnimating = false;
+			}
+		}
+
+		// ... (Canvas Setup, Background, Portraits sections are unchanged) ...
+		ctx.clearRect(0, 0, canvasEl.width, canvasEl.height);
+		ctx.imageSmoothingEnabled = false;
+		ctx.fillStyle = styleVars.boxBg || '#070708';
+		ctx.fillRect(0, 0, canvasEl.width, canvasEl.height);
+
+		let boxW, boxH, boxX, boxY;
+		const isDarkWorld = mode === 'Dark World';
+		const isGameBoard = mode === 'gameboard';
+
+		if (isDarkWorld) {
+			boxW = 593; boxH = 167; boxX = 0; boxY = 0;
+			font = undertale_font;
+			if (isAnimatedBackgroundReady) {
+				if (backgroundAnimState.startTime === null) backgroundAnimState.startTime = currentTime;
+				drawDeltaruneBackground(ctx, boxX, boxY, boxW, boxH, backgroundAnimState.startTime, currentTime);
+			} else {
+				ctx.fillStyle = '#000000';
+				ctx.fillRect(boxX, boxY, boxW, boxH);
+			}
+		} else if (isGameBoard) {
+			boxW = 384; boxH = 86; boxX = 0; boxY = 0;
+			font = font_board;
+			ctx.fillStyle = '#000000';
+			ctx.fillRect(boxX, boxY, boxW, boxH);
+		} else { // Undertale / Light World
+			boxW = 578; boxH = 152; boxX = 8; boxY = 8;
+			font = undertale_font;
+			drawUndertaleBackground(ctx, boxX, boxY, boxW, boxH);
+		}
+
+		let pX = 50
+		let pY = 38
+
+
+		if (imagesToDraw && imagesToDraw.length > 0) {
+			drawPortraits(ctx, pX, pY, imagesToDraw, useMouthImage, isDarkWorld, soundPack);
+		}
+
+		// --- 6. Draw Text ---
+		// NEW: Pass the unified timeline to the text renderer.
+		let textStartY = 15;
+		let textStartX = 20;
+
+		if (imagesToDraw && imagesToDraw.length > 0) {
+			textStartX = 136;
+		}
+
+		if (isGameBoard) {
+			textStartX -= 3;
+			textStartY -= 5;
+		}
+		if (isDarkWorld) {
+			textStartY += 8;
+		}
+
+		const txY = boxY + textStartY;
+
+		drawCanvasText(ctx, timelineItems, font, textStartX, txY, isStatic, currentTime, isDarkWorld);
+	}
+
+
+	/**
+	 * Draws text using a font sprite sheet, with the ability to tint and set transparency.
+	 * For 'Dark World' mode, it applies a vertical gradient from white to the tint color.
+	 *
+	 * @param {string} text The string of text to draw.
+	 * @param {number} x The destination x-coordinate on the canvas.
+	 * @param {number} y The destination y-coordinate on the canvas.
+	 * @param {object} font The font object, containing the image, map, and dimensions.
+	 * @param {CanvasRenderingContext2D} ctx The main canvas rendering context.
+	 * @param {string} [tintColor] The color to tint the text.
+	 * @param {boolean} [isDarkWorld] A boolean to control Dark World-specific rendering effects.
+	 * @param {number} [transparency=1.0] The opacity of the text, from 0.0 (fully transparent) to 1.0 (fully opaque).
+	 */
+	function drawText(text, x, y, font, ctx, tintColor, isDarkWorld, transparency) {
+		if (!font.image || !font.image.complete) return;
+
+		const alpha = Math.max(0, Math.min(1, transparency ?? 1.0));
+		if (alpha <= 0) return;
+
+		const originalAlpha = ctx.globalAlpha;
+		ctx.globalAlpha = alpha;
+
+		const gap = font.charGap ?? 0;
+		const charsPerRow = font.image.width / font.charWidth;
+
+		for (let i = 0; i < text.length; i++) {
+			const char = text[i];
+			const destX = x + (i * (font.charWidth + gap));
+
+			// Fast path for non-tinted, non-space characters
+			if (!tintColor && char !== ' ') {
+				const charIndex = font.map.indexOf(char);
+				if (charIndex === -1) continue;
+				const sourceX = (charIndex % charsPerRow) * font.charWidth;
+				const sourceY = Math.floor(charIndex / charsPerRow) * font.charHeight;
+				ctx.drawImage(font.image, sourceX, sourceY, font.charWidth, font.charHeight, destX, y, font.charWidth, font.charHeight);
+				continue;
+			}
+
+			// Tinting logic
+			if (tintColor && char !== ' ') {
+				// FIXED: The cache key must be unique for the font, character, color, and rendering style.
+				// Using font.image.src provides a unique identifier for the font.
+				const cacheKey = `${font.image.src}_${char}_${tintColor}_${isDarkWorld}`;
+				let tintedCharCanvas = tintCache[cacheKey];
+
+				// If the tinted character is not in the cache, create and cache it
+				if (!tintedCharCanvas) {
+					const charIndex = font.map.indexOf(char);
+					if (charIndex === -1) continue;
+
+					const sourceX = (charIndex % charsPerRow) * font.charWidth;
+					const sourceY = Math.floor(charIndex / charsPerRow) * font.charHeight;
+
+					// Use the single, shared tinting buffer
+					tintBufferCanvas.width = font.charWidth;
+					tintBufferCanvas.height = font.charHeight;
+
+					tintBufferCtx.globalCompositeOperation = 'source-over';
+					tintBufferCtx.clearRect(0, 0, font.charWidth, font.charHeight);
+					tintBufferCtx.drawImage(font.image, sourceX, sourceY, font.charWidth, font.charHeight, 0, 0, font.charWidth, font.charHeight);
+
+					tintBufferCtx.globalCompositeOperation = 'source-in';
+					if (isDarkWorld) {
+						const gradient = tintBufferCtx.createLinearGradient(0, 0, 0, font.charHeight);
+						gradient.addColorStop(0, '#FFFFFF');
+						gradient.addColorStop(1, tintColor);
+						tintBufferCtx.fillStyle = gradient;
+					} else {
+						tintBufferCtx.fillStyle = tintColor;
+					}
+					tintBufferCtx.fillRect(0, 0, font.charWidth, font.charHeight);
+
+					// Create a *new canvas for storage only once* and add it to the cache
+					tintedCharCanvas = document.createElement('canvas');
+					tintedCharCanvas.width = font.charWidth;
+					tintedCharCanvas.height = font.charHeight;
+					tintedCharCanvas.getContext('2d').drawImage(tintBufferCanvas, 0, 0);
+					tintCache[cacheKey] = tintedCharCanvas;
+				}
+
+				// Draw the cached tinted character
+				ctx.drawImage(tintedCharCanvas, destX, y);
+
+			}
+		}
+
+		ctx.globalAlpha = originalAlpha;
+	}
+
+	/* ----- Static Preview ----- */
+	function renderStaticPreview(timeline) {
+
+		const raw_txt = textBoxes[currentBoxIndex].rawText || '';
+		// NEW: Call the single unified parser
+		if (!timeline) {
+			({ timeline } = parseTextToTimeline(raw_txt, textBoxes[currentBoxIndex]));
+		}
+
+
+		const currentBoxData = textBoxes[currentBoxIndex];
+		const styleVars = computeStyleForCanvas();
+		const ctx = canvas.getContext('2d');
+
+		ctx.restore();
+		ctx.save();
+		ctx.scale(resFactor, resFactor);
+
+		// Pass the whole data object for the current textbox
+		drawCanvasFrame(ctx, canvas, timeline, currentBoxData, styleVars, true);
+
+		if (textBoxes[currentBoxIndex].mode === 'gameboard') {
+			// ... (rest of the shader logic is unchanged) ...
+			twgl.resizeCanvasToDisplaySize(gl.canvas);
+			gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+
+			gl.useProgram(programInfo.program);
+			twgl.setBuffersAndAttributes(gl, programInfo, bufferInfo);
+			twgl.setTextureFromElement(gl, texture, canvas);
+
+			twgl.setUniforms(programInfo, {
+				u_texture: texture,
+				u_resolution: [gl.canvas.width, gl.canvas.height],
+				u_time: 0,
+				u_vignette_scale: 0.2,
+				u_vignette_intensity: 33.066,
+				u_chromatic_scale: 1.0,
+				u_filter_amount: 0.1,
+				u_effect_scale: resFactor,
+				u_virtual_rect: [0, 0, canvas.width, canvas.height * 3]
+			});
+
+			twgl.drawBufferInfo(gl, bufferInfo);
+		}
+	}
+
+	function processTextBoxes(textBoxesArray) {
+		// If a single object is passed, wrap it in an array to make it iterable.
+		if (!Array.isArray(textBoxesArray)) {
+			textBoxesArray = [textBoxesArray];
+		}
+
+		const fullTimeline = [];
+		const fullSoundEvents = [];
+		let globalTime = 0;
+		const newBoxTimes = [];
+
+		for (let box = 0; box < textBoxesArray.length; box++) {
+			const boxData = textBoxesArray[box];
+			newBoxTimes.push(globalTime);
+			fullTimeline.push({ type: 'newBox', time: globalTime, boxIndex: box });
+
+			const { rawText } = boxData;
+			if (!rawText) {
+				globalTime += (boxData.delayAfter || 0) / 1000;
+				continue;
+			}
+			// --- Per-box settings ---
+			let tpcValue = (boxData.timePerChar ?? GLOBAL_DEFAULT_TIME_PER_CHAR) / 1000;
+			let minPitch = boxData.minPitch ?? GLOBAL_DEFAULT_MIN_PITCH;
+			let maxPitch = boxData.maxPitch ?? GLOBAL_DEFAULT_MAX_PITCH;
+			const ignored = (boxData.ignoreChars ?? ' .*,?!').split('').map(x => x.toLowerCase());
+			const playEveryN = Math.max(1, boxData.playEveryN ?? GLOBAL_DEFAULT_PLAY_EVERY_N);
+			const pack = soundPacks[boxData.soundPack] || {};
+
+			// --- Parsing state for the current box ---
+			let soundCharCounter = 0;
+			let i = 0;
+			let newLineer = 0;
+			let lastSpaceIndex = -1;
+			let asterskip = rawText.length > 0 && rawText[0] === '*';
+
+			let whenToNewline = (Object.keys(boxData.portraits).length === 0) ? 33 : 26;
+			if (boxData.mode === 'gameboard') whenToNewline = 22;
+			whenToNewline++;
+
+			const boxTimeline = [];
+
+			while (i < rawText.length) {
+				let char = rawText[i];
+				let consumed = 1;
+
+				// --- Automatic line wrapping ---
+				if (newLineer >= whenToNewline && lastSpaceIndex !== -1) {
+					let timelineItem = boxTimeline[lastSpaceIndex];
+					if (timelineItem && timelineItem.type === 'char' && timelineItem.char === ' ') {
+						boxTimeline[lastSpaceIndex] = { type: 'newline', time: timelineItem.time + tpcValue };
+						if (asterskip) {
+							const insertTime = timelineItem.time;
+							boxTimeline.splice(lastSpaceIndex + 1, 0,
+								{ type: 'char', char: '|', time: insertTime },
+								{ type: 'char', char: '|', time: insertTime }
+							);
+						}
+					}
+					let charsAfterWrap = 0;
+					for (let j = lastSpaceIndex + 1; j < boxTimeline.length; j++) {
+						if (boxTimeline[j].type === 'char') charsAfterWrap++;
+						if (boxTimeline[j].type === 'funnytext') {
+							charsAfterWrap += Math.ceil(funnyTexts[boxTimeline[j].funnyindex].frameWidth / 16);
+						}
+					}
+					newLineer = charsAfterWrap;
+					lastSpaceIndex = -1;
+				}
+
+				if (rawText[i - 1] !== '`') {
+					// --- Handle control codes ---
+					if (char === '^') {
+						let delayAmount = 0;
+						const nxt = rawText[i + 1];
+						if (boxData.delayMode === 'deltarune' && nxt && deltaruneDelayMap[nxt]) {
+							delayAmount = ((deltaruneDelayMap[nxt] * 33.33) / 1000) + 0.09999; //IT HAS A THREE FRAME DELAY FOR SOME REASON GAMEMAKER GRRR!
+							boxTimeline.push({ type: 'delay', value: `^${nxt}`, time: globalTime });
+							consumed = 2;
+						} else if (boxData.delayMode === 'ms') {
+							const match = rawText.substring(i + 1).match(/^[0-9.]+/);
+							if (match) {
+								delayAmount = parseFloat(match[0]) / 1000;
+								boxTimeline.push({ type: 'delay', value: match[0], time: globalTime });
+								consumed = 1 + match[0].length;
+							}
+						}
+						if (delayAmount > 0) globalTime += delayAmount;
+						i += consumed; continue;
+					} else if (char === '\\' && i + 1 < rawText.length) {
+						const nextChar = rawText[i + 1];
+						let codeProcessed = false;
+
+						if (nextChar === 'T') { // Change speed: \T[50]
+							const match = rawText.substring(i + 2).match(/^\[([0-9.]+)\]/);
+							if (match) {
+								tpcValue = parseFloat(match[1]) / 1000;
+								consumed = 3 + match[1].length;
+								codeProcessed = true;
+							}
+						} else if (nextChar === 'P') { // Change pitch: \P[0.8,1.2]
+							const match = rawText.substring(i + 2).match(/^\[([0-9.]+),([0-9.]+)\]/);
+							if (match) {
+								minPitch = parseFloat(match[1]);
+								maxPitch = parseFloat(match[2]);
+								consumed = 5 + match[1].length + match[2].length;
+								codeProcessed = true;
+							}
+						} else if (nextChar === '\\') { // Color, Effect, etc.
+							const colorCodeMap = { 'R': '#ff0000', 'B': '#0000ff', 'Y': '#ffff00', 'G': '#00ff00', 'P': '#800080', 'X': '#000000', 'M': '#800000', 'O': '#ffa040', 'A': '#00AEFF', 'S': '#FF80FF', 'V': '#80FF80', 'I': '#81C0FF', 'W': 'clear' };
+
+							const sub = rawText.substring(i + 2);
+							if (sub.startsWith('c')) {
+								const code = sub.substring(1);
+								if (code.startsWith('#') && /^[0-9a-fA-F]{6}/.test(code.substring(1))) {
+									const hex = code.substring(0, 7);
+									boxTimeline.push({ type: 'color', value: hex, time: globalTime });
+									consumed = 10; codeProcessed = true;
+								} else if (colorCodeMap[code[0]]) {
+									boxTimeline.push({ type: 'color', value: colorCodeMap[code[0]], time: globalTime });
+									consumed = 4; codeProcessed = true;
+								} else {
+									// Fallback for unknown single-letter codes, though it might not be intended
+									boxTimeline.push({ type: 'color', value: 'clear', time: globalTime });
+									consumed = 4; codeProcessed = true;
+								}
+							} else if (sub.startsWith('O')) {
+								const funnyIndex = parseInt(sub.substring(1), 10);
+								const spriteData = funnyTexts[funnyIndex];
+								if (!isNaN(funnyIndex) && spriteData) {
+									boxTimeline.push({ type: 'funnytext', funnyindex: funnyIndex, animation: { startTime: null }, time: globalTime });
+									if (spriteData.file) {
+										fullSoundEvents.push({ time: globalTime, file: spriteData.file, packKey: null, minPitch: 1, maxPitch: 1 });
+									}
+									newLineer += Math.ceil(spriteData.frameWidth / 16);
+									consumed = 4; codeProcessed = true;
+								}
+							}
+						} else if (nextChar === 'n') {
+							boxTimeline.push({ type: 'newline', time: globalTime });
+							if (asterskip) {
+								boxTimeline.push({ type: 'char', char: '|', time: globalTime }, { type: 'char', char: '|', time: globalTime });
+							}
+							newLineer = 0; lastSpaceIndex = -1;
+							consumed = 2; codeProcessed = true;
+						}
+
+						if (codeProcessed) { i += consumed; continue; }
+						char = '\\'; // Not a special code, treat as literal
+					} else if (char === '&' || char === '\n') {
+						boxTimeline.push({ type: 'newline', time: globalTime });
+						if (asterskip) boxTimeline.push({ type: 'char', char: '|', time: globalTime }, { type: 'char', char: '|', time: globalTime });
+						newLineer = 0; lastSpaceIndex = -1;
+						i += 1; continue;
+					} else if (char === '/') {
+						boxTimeline.push({ type: 'halt', time: globalTime });
+						if (rawText[i + 1] === '%') { boxTimeline.push({ type: 'end', time: globalTime }); consumed = 2; }
+						i += consumed; continue;
+					} else if (char === '%') {
+						boxTimeline.push({ type: 'nextbox', time: globalTime, boxIndex: textBoxesArray.indexOf(boxData) + 1 });
+						i += 1; continue;
+					} else if (char === '`') {
+						i += 1; continue;
+					}
+				}
+
+				// --- Default: Process as a displayable character ---
+				if (char === ' ') lastSpaceIndex = boxTimeline.length;
+				boxTimeline.push({ type: 'char', char: char, time: globalTime });
+
+				const chLower = char.toLowerCase();
+				if (!ignored.includes(chLower) && char !== '|') {
+					if ((soundCharCounter % playEveryN) === 0) {
+						let soundFile = null;
+						if (pack.type === 'single') soundFile = pack.file;
+						else if (pack.type === 'multi') soundFile = `${chLower}.wav`;
+						else if (pack.type === 'random') soundFile = pack.files[Math.floor(Math.random() * pack.files.length)];
+
+						let eventMinPitch = minPitch;
+						let eventMaxPitch = maxPitch;
+						if (boxData.soundPack === 'old_man' && Math.random() > 0.66) {
+							let pitchShift = Math.random() * 0.2;
+							eventMinPitch -= pitchShift
+							eventMaxPitch -= pitchShift
+
+						}
+
+						if (soundFile) {
+							fullSoundEvents.push({
+								time: globalTime,
+								file: soundFile,
+								packKey: boxData.soundPack,
+								minPitch: eventMinPitch,
+								maxPitch: eventMaxPitch,
+								monophonic: pack.monophonic // Only apply to non-random packs for now
+							});
+						}
+					}
+					soundCharCounter++;
+				}
+
+				newLineer++;
+				if (char !== '|') globalTime += tpcValue;
+				i += consumed;
+			}
+
+			if (pack.finishSound) {
+				fullSoundEvents.push({
+					time: fullSoundEvents[fullSoundEvents.length - 1].time,
+					file: pack.finishSound,
+					packKey: boxData.soundPack,
+					minPitch: 1, maxPitch: 1
+				});
+			}
+
+			// Add the parsed items for this box to the full timeline
+			fullTimeline.push(...boxTimeline);
+
+			// Add delay after this box, unless it's the last one
+			if (box < textBoxesArray.length - 1) {
+				globalTime += (boxData.delayAfter || 0) / 1000;
+			}
+		}
+
+		return { timeline: fullTimeline, soundEvents: fullSoundEvents, duration: globalTime, newBoxTimes };
+	}
+
+	/* ----- Preview flow ----- */
+	async function startPlayFlow({ record = false, lossless = false } = {}) {
+		// NEW: Stop any playback that is already running
+		stopCurrentPlayback();
+
+		mouthAnimationState = { isAnimating: false, startTime: 0, buffer: 4, prevCharCount: 0 };
+		backgroundAnimState.startTime = null;
+
+		// --- 1. Build Full Timeline & Load All Assets ---
+		status.textContent = 'Parsing and loading assets...';
+
+		const { timeline: fullTimeline, soundEvents: fullSoundEvents, duration: totalDuration, newBoxTimes } = processTextBoxes(textBoxes);
+
+		const allLoadPromises = [];
+		const uniquePacks = [...new Set(fullSoundEvents.map(ev => ev.packKey))];
+		uniquePacks.forEach(packKey => {
+			const eventsForPack = fullSoundEvents.filter(ev => ev.packKey === packKey);
+			allLoadPromises.push(loadBuffersForPack(packKey, eventsForPack));
+		});
+		await Promise.all(allLoadPromises);
+
+		// --- 2. Schedule All Audio ---
+		status.textContent = 'Scheduling audio...';
+		const { scheduledNodes } = processAudioEvents(fullSoundEvents, audioCtx, mainAudioGain);
+		currentPlayback.scheduledNodes = scheduledNodes;
+
+		// --- 3. Setup Recording / Audio Playback ---
+		audioPlayer.srcObject = mainAudioDestination.stream;
+		audioPlayer.play().catch(e => console.warn('Audio playback failed:', e));
+
+		const ctx = canvas.getContext('2d');
+		const styleVars = computeStyleForCanvas();
+		textPreview.textContent = '';
+
+		let recorder, recordedChunks = [], frameBlobs = [];
+		if (record && !lossless) {
+			status.textContent = 'Recording (WebM)...';
+			let videoStream = canvas.captureStream(30); // Use the main canvas for video
+			const combinedAudioStream = mainAudioDestination.stream;
+			const combined = new MediaStream([...videoStream.getVideoTracks(), ...combinedAudioStream.getAudioTracks()]);
+			recorder = new MediaRecorder(combined, { mimeType: 'video/webm;codecs=vp9,opus', audioBitsPerSecond: 192000 });
+			recorder.ondataavailable = (e) => { if (e.data && e.data.size) recordedChunks.push(e.data); };
+			recorder.onstop = () => {
+				const url = URL.createObjectURL(new Blob(recordedChunks, { type: 'video/webm' }));
+				downloadVideoLink.href = url; downloadVideoLink.style.display = 'inline-block'; downloadVideoLink.download = 'textbox_animation.webm';
+				status.textContent = 'Recording finished.';
+				stopCurrentPlayback();
+			};
+			recorder.start();
+		} else if (lossless) {
+			status.textContent = 'Capturing frames for lossless recording...';
+		} else {
+			status.textContent = 'Preview playing...';
+		}
+
+		const renderInterval = 1000 / 30; // ~30 FPS
+		let haltTime = -1;
+		let animationTime = 0; // NEW: This time will always advance for visual effects
+
+		function renderFrame(elapsed, isStatic = false) {
+			// --- OPTIMIZATION ---
+			// Use the pre-calculated newBoxTimes array to quickly find the current box.
+			// This is much faster than filtering/searching the entire timeline on every frame.
+			const currentBoxIndex = newBoxTimes.findLastIndex(time => time <= elapsed);
+			const startTime = newBoxTimes[currentBoxIndex];
+			// The end time for the current box's content is the start of the next box, or the total duration.
+			const contentEndTime = newBoxTimes[currentBoxIndex + 1] ?? totalDuration;
+			// --- END OPTIMIZATION ---
+
+			const currentBoxData = textBoxes[currentBoxIndex];
+
+
+			// Filter to show only items for the current box that have occurred.
+			const itemsToShow = fullTimeline.filter(item =>
+				item.time >= startTime &&
+				item.time <= elapsed &&
+				item.time < contentEndTime // Don't show content from the next box during the delay
+			);
+
+			const shownTextForHTML = itemsToShow.filter(item => item.type === 'char').map(item => item.char).join('');
+
+			textPreview.textContent = shownTextForHTML || ' ';
+
+			ctx.restore();
+			ctx.save();
+			ctx.scale(resFactor, resFactor);
+
+			drawCanvasFrame(ctx, canvas, itemsToShow, currentBoxData, styleVars, isStatic, animationTime);
+
+			if (currentBoxData.mode === 'gameboard') {
+				let sourceCanvas = canvas;
+				twgl.resizeCanvasToDisplaySize(gl.canvas);
+				gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+				gl.useProgram(programInfo.program);
+				twgl.setBuffersAndAttributes(gl, programInfo, bufferInfo);
+				twgl.setTextureFromElement(gl, texture, canvas);
+				twgl.setUniforms(programInfo, {
+					u_texture: texture,
+					u_resolution: [gl.canvas.width, gl.canvas.height], // Use animationTime for shader effects
+					u_time: elapsed,
+					u_vignette_scale: 0.2,
+					u_vignette_intensity: 33.066,
+					u_chromatic_scale: 1.0,
+					u_filter_amount: 0.1,
+					u_effect_scale: resFactor,
+					u_virtual_rect: [0, 0, canvas.width, canvas.height * 3]
+				});
+				twgl.drawBufferInfo(gl, bufferInfo);
+			}
+
+		}
+
+		function playbackLoop(startTime = 0) {
+			let frame = Math.floor(startTime * 30);
+			const totalFrames = Math.ceil((totalDuration + 0.25) * 30);
+
+			function step() {
+				animationTime = performance.now(); // Always update animation time
+				if (frame >= totalFrames) {
+					if (record && !lossless) {
+						setTimeout(() => recorder.stop(), 250);
+						status.textContent = 'Finalizing recording...';
+					} else if (lossless) {
+						setTimeout(() => encodeLosslessVideo(frameBlobs, totalDuration + 0.25, fullSoundEvents), 100);
+					} else {
+						status.textContent = 'Preview complete.';
+					}
+					currentPlayback.animationFrameId = null;
+					clearInterval(intervalId);
+					return;
+				}
+
+				let elapsed = frame * (1 / 30);
+				renderFrame(elapsed, false);
+
+				// --- Lossless Frame Capture ---
+				if (record && lossless) {
+					let sourceCanvas = (modeSelect.value === 'gameboard') ? shaderCanvas : canvas;
+					sourceCanvas.toBlob(blob => {
+						if (blob) frameBlobs.push(blob);
+					}, 'image/png');
+				}
+				frame++;
+			}
+			const intervalId = setInterval(step, renderInterval);
+
+			currentPlayback.animationFrameId = intervalId; // Store interval ID for cancellation
+		}
+
+		playbackLoop();
+	}
+
+	async function audioBlob(allSoundEvents) {
+		return new Promise(async (resolve, reject) => {
+			startOfflineRenderForDownload(null, allSoundEvents, resolve);
+		});
+	}
+	/* ----- Lossless Encoding (Helper for startPlayFlow) ----- */
+	async function encodeLosslessVideo(frameBlobs, duration, allSoundEvents) {
+		if (frameBlobs.length === 0) {
+			status.textContent = 'Error: No frames were captured for lossless recording.';
+			return; // This was missing
+		}
+
+		// 1. Get the pre-rendered audio
+		const audioWavBlob = await audioBlob(allSoundEvents);
+
+		// 2. Calculate the actual frame rate from the captured frames
+		const actualFrameRate = Math.max(1, frameBlobs.length / duration); // Ensure framerate is at least 1
+		status.textContent = `Encoding ${frameBlobs.length} frames at ~${actualFrameRate.toFixed(2)} FPS...`;
+
+		// 3. Use ffmpeg.wasm to combine frames and audio
+		status.textContent = 'Loading FFmpeg (~25MB)...';
+		const ffmpeg = FFmpeg.createFFmpeg({ log: true });
+		await ffmpeg.load();
+
+		status.textContent = 'Encoding video with FFmpeg...';
+		ffmpeg.FS('writeFile', 'audio.wav', new Uint8Array(await audioWavBlob.arrayBuffer()));
+
+		for (let i = 0; i < frameBlobs.length; i++) {
+			const frameNum = String(i).padStart(5, '0');
+			ffmpeg.FS('writeFile', `frame-${frameNum}.png`, new Uint8Array(await frameBlobs[i].arrayBuffer()));
+		}
+
+		// Encode using H.264 with a "visually lossless" quality setting (crf 18 is very high quality)
+		await ffmpeg.run('-framerate', `${actualFrameRate}`, '-i', 'frame-%05d.png', '-i', 'audio.wav', '-c:v', 'libx264', '-preset', 'ultrafast', '-crf', '18', '-pix_fmt', 'yuv420p', 'output.mp4');
+
+		const videoData = ffmpeg.FS('readFile', 'output.mp4');
+		const videoBlob = new Blob([videoData.buffer], { type: 'video/mp4' });
+		const url = URL.createObjectURL(videoBlob);
+
+		downloadVideoLink.href = url;
+		downloadVideoLink.style.display = 'inline-block';
+		downloadVideoLink.download = 'textbox_lossless.mp4';
+		status.textContent = 'Lossless recording finished.';
+	}
+	/* ----- Offline render for WAV download ----- */
+	async function startOfflineRenderForDownload(packKey, events, callback) { // Renamed from timeline to events for clarity
+		const totalDuration = events.length > 0 ? events[events.length - 1].time : 1.0;
+		const duration = (totalDuration || 1.0) + 0.5; // Add padding
+		const offline = new OfflineAudioContext(1, Math.ceil(duration * audioCtx.sampleRate), audioCtx.sampleRate);
+
+		// Delegate all the complex logic to the new unified function
+		processAudioEvents(events, offline, offline.destination);
+
+		offline.startRendering().then(rendered => {
+			const wav = bufferToWave(rendered);
+			if (callback) {
+				callback(wav);
+			} else {
+				const url = URL.createObjectURL(wav);
+				downloadLink.href = url;
+				downloadLink.style.display = 'inline-block';
+				status.textContent = 'WAV ready for download.';
+			}
+		}).catch(e => {
+			console.warn('Offline render failed', e);
+			status.textContent = 'Offline render failed: ' + (e.message || e);
+			if (callback) callback(null);
+		});
+	}
+
+	function bufferToWave(buffer) {
+		const numOfChan = buffer.numberOfChannels, length = buffer.length * numOfChan * 2 + 44;
+		const view = new DataView(new ArrayBuffer(length));
+		let offset = 0;
+		function writeString(s) { for (let i = 0; i < s.length; i++) view.setUint8(offset + i, s.charCodeAt(i)); offset += s.length; }
+		function writeUint32(d) { view.setUint32(offset, d, true); offset += 4; }
+		function writeUint16(d) { view.setUint16(offset, d, true); offset += 2; }
+		writeString('RIFF'); writeUint32(length - 8); writeString('WAVE'); writeString('fmt ');
+		writeUint32(16); writeUint16(1); writeUint16(numOfChan); writeUint32(buffer.sampleRate);
+		writeUint32(buffer.sampleRate * numOfChan * 2); writeUint16(numOfChan * 2); writeUint16(16);
+		writeString('data'); writeUint32(length - offset - 4);
+		for (let i = 0; i < buffer.length; i++) {
+			for (let ch = 0; ch < numOfChan; ch++) {
+				const s = Math.max(-1, Math.min(1, buffer.getChannelData(ch)[i]));
+				view.setInt16(offset, s < 0 ? s * 0x8000 : s * 0x7FFF, true);
+				offset += 2;
+			}
+		}
+		return new Blob([view], { type: 'audio/wav' });
+	}
+
+	/**
+* A unified function to schedule audio events for both live playback and offline rendering.
+* @param {Array} events - The array of sound events to process.
+* @param {AudioContext|OfflineAudioContext} context - The audio context to use.
+* @param {AudioNode} destination - The destination node for the audio graph.
+* @returns {Object|undefined} For live contexts, returns an object with scheduledNodes for cancellation.
+*/
+	function processAudioEvents(events, context, destination) {
+		const isLive = context instanceof AudioContext;
+		const scheduledNodes = [];
+		const timeOffset = isLive ? context.currentTime : 0;
+
+		for (let i = 0; i < events.length; i++) {
+			const ev = events[i];
+			const cacheKey = ev.packKey ? `${ev.packKey}:${ev.file}` : `direct:${ev.file}`;
+			const buffer = audioBufferCache[cacheKey];
+
+			if (!buffer) continue;
+
+			const gainNode = context.createGain();
+			const src = context.createBufferSource();
+
+			src.buffer = buffer;
+			src.playbackRate.value = (ev.minPitch === ev.maxPitch) ?
+				ev.minPitch :
+				(Math.random() * (ev.maxPitch - ev.minPitch) + ev.minPitch);
+
+			src.connect(gainNode);
+			gainNode.connect(destination);
+
+			const startAt = timeOffset + ev.time;
+			src.start(startAt);
+
+			// Apply monophonic cutoff if the event's pack specifies it
+			if (ev.monophonic) {
+				const nextEventInGroup = events.slice(i + 1).find(nextEv => nextEv.packKey === ev.packKey);
+
+				if (nextEventInGroup) {
+					const stopAt = timeOffset + nextEventInGroup.time;
+					const FADE_DURATION = 0.001;
+					const fadeOutStartTime = stopAt - FADE_DURATION;
+					if (fadeOutStartTime > startAt) {
+						gainNode.gain.setValueAtTime(1, fadeOutStartTime);
+						gainNode.gain.linearRampToValueAtTime(0, stopAt);
+					}
+					src.stop(stopAt);
+				}
+			}
+
+			if (isLive) {
+				scheduledNodes.push({ src, gain: gainNode, startAt });
+			}
+		}
+
+		if (isLive) {
+			return { scheduledNodes };
+		}
+	}
+
+	function stopCurrentPlayback() {
+		// Stop any scheduled audio nodes with a small fade to prevent clicks
+		if (currentPlayback.scheduledNodes?.length > 0) {
+			const now = audioCtx.currentTime;
+			currentPlayback.scheduledNodes.forEach(({ src, gain }) => {
+				try {
+					if (src.playbackState === src.PLAYING_STATE || src.playbackState === src.SCHEDULED_STATE) {
+						gain.gain.cancelScheduledValues(now);
+						gain.gain.setValueAtTime(gain.gain.value, now);
+						gain.gain.linearRampToValueAtTime(0, now + 0.05);
+						src.stop(now + 0.05);
+					}
+				} catch (e) {
+					// Ignore errors if the node has already stopped or is invalid
+				}
+			});
+		}
+
+		// Cancel the animation frame or recording interval
+		if (currentPlayback.animationFrameId) {
+			// This now clears the interval timer used by the unified playbackLoop
+			clearInterval(currentPlayback.animationFrameId);
+		}
+
+		// Reset the state for the next playback
+		currentPlayback = {
+			scheduledNodes: [],
+			animationFrameId: null
+		};
+	}
+
+	/* ----- UI wiring ----- */
+	previewBtn.addEventListener('click', () => startPlayFlow({ record: false }));
+	recordBtn.addEventListener('click', () => startPlayFlow({ record: true, lossless: false, }));
+	recordLosslessBtn.addEventListener('click', () => startPlayFlow({ record: true, lossless: true, }));
+	renderAudioBtn.addEventListener('click', async () => {
+		const { soundEvents } = processTextBoxes(textBoxes);
+		if (soundEvents.length === 0) {
+			alert('Enter text first.');
+			return;
+		}
+		const uniquePacks = [...new Set(soundEvents.map(ev => ev.packKey))];
+		const loadPromises = uniquePacks.map(packKey => {
+			const eventsForPack = soundEvents.filter(ev => ev.packKey === packKey);
+			return loadBuffersForPack(packKey, eventsForPack);
+		});
+		await Promise.all(loadPromises);
+		startOfflineRenderForDownload(null, soundEvents);
+	});
+
+
+
+
+
+	/* ----- Init ----- */
+	init();
+</script>

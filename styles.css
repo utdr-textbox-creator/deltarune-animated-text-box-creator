@@ -1,0 +1,730 @@
+
+    :root {
+      --bg: #0f1113;
+      --panel: #191b1e;
+      --accent: #62ca95;
+      --text: #e9eef2;
+      --muted: #9aa0a6
+    }
+
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Inter, system-ui, Segoe UI, Roboto, Arial
+    }
+
+    .wrap {
+      max-width: 1150px;
+      margin: 20px auto;
+      padding: 18px;
+      background: var(--panel);
+      border-radius: 12px
+    }
+
+    h1 {
+      color: var(--accent);
+      margin: 0 0 12px
+    }
+
+    .row {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap
+    }
+
+    .col {
+      flex: 1 1 340px;
+      min-width: 300px
+    }
+
+    label {
+      display: block;
+      font-weight: 600;
+      color: var(--muted);
+      margin-bottom: 1px
+    }
+
+    textarea,
+    input,
+    select,
+    button {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 10px;
+      border-radius: 0px;
+      background: #111214;
+      border: 1px solid rgba(255, 255, 255, 0.03);
+      color: var(--text)
+    }
+
+    textarea {
+      min-height: 120px;
+      font-size: 14px;
+
+    }
+
+    button {
+      background: var(--accent);
+      border: none;
+      color: #03120e;
+      font-weight: 700;
+      padding: 10px;
+      cursor: pointer
+    }
+
+    .panel {
+      padding: 12px;
+      border-radius: 0px;
+      background: #0c0d0f
+    }
+
+    .controls {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 8px
+    }
+
+    .small {
+      font-size: 0.8em;
+      color: var(--muted)
+    }
+
+    .undertale-box {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      padding: 8px;
+      border-radius: 0px;
+      background: transparent
+    }
+
+    .portrait {
+      width: 96px;
+      height: 96px;
+      background: #111;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--muted);
+      font-weight: 700;
+      position: relative;
+      overflow: hidden
+    }
+
+    .portrait img {
+      position: absolute;
+    }
+
+    .txt-area {
+      flex: 1;
+      background: #000;
+      padding: 12px;
+      border-radius: 6px;
+      color: #fff;
+      font-family: undertale;
+      min-height: 96px;
+      font-size: 24px;
+      white-space: pre-wrap;
+      overflow: hidden
+    }
+
+    
+
+    canvas {
+      border-radius: 0px;
+    }
+
+    .canvas-overlay-wrapper {
+      position: relative;
+      /* This wrapper will take its dimensions from the renderCanvas inside it */
+    }
+
+    #renderCanvas {
+
+      z-index: -10;
+      /* The base canvas keeps the background */
+    }
+
+    #shaderCanvas {
+      z-index: 1;
+      position: absolute;
+      top: 0;
+      left: 0;
+      background: transparent;
+      /* The overlay canvas has no background */
+      /* Allows clicks to pass through to elements behind it */
+    }
+
+    .download-link {
+      display: inline-block;
+      padding: 8px 10px;
+      border-radius: 0px;
+      background: #2b2f32;
+      color: white;
+      text-decoration: none
+    }
+
+    .portrait-group {
+      border: 1px solid #333;
+      padding: 8px;
+      margin-bottom: 8px;
+      border-radius: 4px;
+    }
+
+    .portrait-group legend {
+      color: var(--muted);
+      font-weight: bold;
+      padding: 0 4px;
+    }
+
+    .portrait-options {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(96px, 1fr));
+      gap: 4px;
+    }
+
+    .portrait-options label {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      background: #222;
+      padding: 2px;
+      border-radius: 4px;
+      cursor: pointer;
+      border: 1px solid transparent;
+    }
+    .portrait-options label { aspect-ratio: 1 / 1; }
+
+    .portrait-options input[type="radio"] {
+      display: none;
+    }
+
+    .portrait-options input[type="radio"]:checked+label {
+      border-color: var(--accent);
+    }
+
+    .portrait-options img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      background: #111;
+      border-radius: 4px;
+      image-rendering: pixelated;
+    }
+
+    .portrait-label {
+      min-height: 96px;
+      min-width: 96px;
+
+    }
+
+    /* --- NEW STYLES FOR POPUP --- */
+    .portrait-selector-wrapper {
+      position: relative;
+      z-index: 10;
+    }
+
+    .portrait-preview-status {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.03);
+      background: #111214;
+      border-radius: 0px;
+      /* Keep consistent with inputs */
+    }
+
+    .portrait-preview-status .current-portrait-img {
+      width: 32px;
+      height: 32px;
+      object-fit: contain;
+      background: #000;
+      border-radius: 2px;
+      image-rendering: pixelated;
+    }
+
+    .portrait-preview-status button {
+      padding: 5px 10px;
+      margin: 0;
+      width: auto;
+      font-weight: 500;
+      background: #2b2f32;
+      color: var(--text);
+      border: none;
+    }
+
+    .portrait-dropdown-panel {
+      position: absolute;
+      /* Change to fixed to fill viewport */
+      max-height: calc(60vh - 40px);
+      width: calc(48vw - 45px);
+      background: var(--panel);
+      /* Use the main panel background */
+      border: 2px solid var(--accent);
+      overflow-y: auto;
+      z-index: 1000;
+      /* Ensure it is on top of everything */
+      padding: 15px;
+      box-sizing: border-box;
+    }
+
+    .portrait-dropdown-panel .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 2px;
+      background: #2b2f32;
+      border: 1px solid #444;
+      color: var(--text);
+      border-radius: 50%;
+      width: 32px;
+      height: 32px;
+      font-weight: bold;
+      font-family: monospace;
+      font-size: 16px;
+      line-height: 30px;
+      text-align: center;
+      cursor: pointer;
+      z-index: 1002;
+      display: none;
+      padding: 0;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+ 
+
+    .highlight-delay {
+      background-color: rgba(100, 160, 255, 0.4);
+      color: #d0e0ff;
+    }
+    .highlight-color-code {
+      color: #000;
+      font-weight: bold;
+    }
+    .highlight-funnytext {
+      background-color: rgba(255, 100, 220, 0.4);
+      color: #ffd0f5;
+    }
+    .highlight-newline {
+      background-color: rgba(255, 255, 255, 0.1);
+      color: var(--muted);
+    }
+    .highlight-flow {
+      background-color: rgba(255, 215, 0, 0.3);
+      color: #fff5d0;
+    }
+    .highlight-special {
+      background-color: rgba(255, 255, 255, 0.15);
+      border-radius: 3px;
+    }
+
+    .textarea-buttons {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      width: auto;
+	    justify-content: flex-end;
+	    padding: 1px;
+	    gap: 1px;
+
+	  
+    }
+
+    .textarea-buttons button {
+      width: 38px;
+      height: 38px;
+      padding: 5px;
+      margin: 1px 0;
+      border-radius: 3px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      background: #2b2f32;
+      color: var(--text);
+    }
+
+    .textarea-buttons button:hover {
+      background: #3a3f44;
+    }
+
+    
+
+    .textarea-buttons button:active {
+      background: #4a4f55;
+      border: var(--accent) 1px solid;
+    }
+
+    .textarea-buttons button:active:disabled {
+      background: #1f2224;
+      color: #101216;
+      border: #101216 1px solid;
+    }
+
+    .textarea-wrapper {
+      position: relative;
+      flex: 1;
+    }
+
+    .textarea-buttons button:disabled {
+      background: #1f2224;
+      color: #101216;
+    }
+
+    .textarea-buttons.left {
+      order: 0;
+
+    }
+
+    .textarea-buttons.right {
+      order: 3;
+    }
+
+
+
+    #inputText {
+      position: relative;
+      border-radius: 0;
+      /* NEW: For WYSIWYG mode */
+      line-height: 1.2; /* Match highlight container */
+    }
+
+    #inputText.wysiwyg-active {
+      color: transparent;
+      caret-color: var(--text); /* Keep the caret visible */
+      pointer-events: none;
+      visibility: hidden;
+    }
+
+    .textarea-container {
+      display: flex;
+      align-items: stretch;
+      gap: 0;
+    }
+
+    #text-highlight-container, #editorInputText {
+      padding: 10px;
+      font-family: 'undertale', monospace;
+      font-size: 23px;
+      white-space: pre-wrap;
+      overflow: hidden;
+      pointer-events: none; /* Allows clicks to pass through to the textarea */
+      color: transparent; /* Hide the actual text, we only want to see the colored spans */
+      caret-color: var(--text); /* Make the blinking cursor visible */
+      background: none;
+      border: 1px solid transparent;
+      box-sizing: border-box;
+      line-height: 1.2;
+    }
+
+    #text-highlight-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 1;
+    }
+    
+    #editorInputText {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      visibility: hidden;
+
+    }
+
+    #editorInputText.editorInputText-active {
+      pointer-events: auto;
+      visibility: visible;
+    }
+    #editorInputText.editorInputText-active::selection {
+
+      background: #5b59a5;
+
+
+    }
+
+    .wysiwyg-toolbar {
+      display: flex;
+      gap: 15px;
+      background: #1f2224;
+      padding: 5px 8px;
+      border-radius: 4px 4px 0 0;
+      border: 1px solid rgba(255, 255, 255, 0.03);
+      border-bottom: none;
+      align-items: center;
+      flex-direction: column;
+    }
+
+    .wysiwyg-toolbar .color-palette {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .wysiwyg-toolbar .palette-separator {
+        width: 1px;
+        height: 20px;
+        background-color: #555;
+        margin: 0 4px;
+    }
+
+    .wysiwyg-toolbar .color-swatch {
+        width: 24px;
+        height: 24px;
+        border-radius: 4px;
+        border: 2px solid transparent;
+        cursor: pointer;
+        padding: 0;
+        transition: transform 0.15s ease, border-color 0.15s ease;
+        font-size: 0;
+    }
+
+    .wysiwyg-toolbar .color-swatch:hover {
+        transform: scale(1.15);
+        border-color: var(--accent);
+    }
+
+    .wysiwyg-toolbar .color-swatch[data-code="W"] {
+        background-color: #fff;
+        background-image: linear-gradient(135deg, transparent 46%, #ff5555 46%, #ff5555 54%, transparent 54%);
+        border-color: #777;
+    }
+
+    .wysiwyg-toolbar .custom-color-label {
+        position: relative;
+        display: inline-block;
+        width: 24px;
+        height: 24px;
+        border-radius: 4px;
+        border: 2px solid #777;
+        cursor: pointer;
+        transition: transform 0.15s ease, border-color 0.15s ease;
+        background: conic-gradient(red, yellow, lime, aqua, blue, magenta, red);
+    }
+
+    .wysiwyg-toolbar .custom-color-label:hover {
+        transform: scale(1.15);
+        border-color: var(--accent);
+    }
+
+    .wysiwyg-toolbar #color-picker {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        opacity: 0;
+        padding: 0;
+        margin: 0;
+        border: none;
+    }
+
+    .wysiwyg-toolbar button {
+      width: auto;
+      padding: 5px 10px;
+    }
+
+    #wysiwyg-editor {
+        width: 100%;
+        min-height: 120px;
+        padding: 10px;
+        box-sizing: border-box;
+        background-color: #111214;
+        border: 1px solid rgba(255, 255, 255, 0.03);
+        color: var(--text);
+        font-size: 26px;
+        line-height: 1.5;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        font-family: "undertale", "Courier New", Courier, monospace;
+        outline: none;
+    }
+
+    #wysiwyg-editor:focus {
+        border-color: var(--accent);
+    }
+
+    #wysiwyg-editor::selection {
+        background-color: #3a4a63;
+    }
+
+    #wysiwyg-editor .marker {
+        position: relative;
+        display: inline-block;
+        width: 4px;
+        height: 1.2em;
+        vertical-align: text-bottom;
+        margin: 0 1px;
+        outline: none;
+        border: solid rgba(0, 0, 0, 0.3);
+        border-right-width: 1px;
+        border-left-width: 1px;
+        border-bottom-width: 1px;
+        cursor: help;
+        transition: transform 0.15s ease, filter 0.15s ease;
+    }
+
+    #wysiwyg-editor .marker:hover {
+        transform: scale(1.1);
+        filter: brightness(1.2);
+    }
+
+    #wysiwyg-editor .marker::before {
+        content: attr(data-ui-text);
+        position: absolute;
+        bottom: 1.5em;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 2px 5px;
+        border-radius: 4px;
+        font-size: 11px;
+        font-family: Inter, system-ui, sans-serif;
+        color: black;
+        white-space: nowrap;
+        user-select: none;
+        border: 1px solid rgba(0, 0, 0, 0.3);
+        z-index: 10;
+        pointer-events: none; /* So it doesn't interfere with hover on the marker itself */
+    }
+
+    #wysiwyg-editor .marker-delay {
+        background-color: #64a0ff;
+    }
+    #wysiwyg-editor .marker-delay::before { background-color: #64a0ff; }
+
+    #wysiwyg-editor .marker-effect {
+        background-color: #ff64dc;
+    }
+    #wysiwyg-editor .marker-effect::before { background-color: #ff64dc; }
+
+    .hidden {
+        display: none !important;
+    }
+
+
+    
+    .wysiwyg-line {
+      position: relative;
+      min-height: 1.2em; /* Ensure line has height even if empty */
+    }
+
+    .wysiwyg-group {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .wysiwyg-toolbar label {
+      margin: 0;
+      font-size: 0.9em;
+    }
+
+    .wysiwyg-toolbar select {
+      width: auto;
+      min-width: 80px;
+    }
+
+    .wysiwyg-toolbar input[type="checkbox"] {
+      width: auto;
+    }
+
+.marker {
+    position: absolute;
+    top: 2px;
+    cursor: help;
+    z-index: 2;
+
+    /* Give the element actual dimensions */
+    width: 14px;  /* (border-left + border-right from your original code) */
+    height: 12px; /* (border-top from your original code) */
+
+    /* The magic! This clips the rectangular div into a triangle. */
+    /* The points are: [top-center], [bottom-left], [bottom-right] */
+    /* clip-path: polygon(50% 100%, 0 0, 100% 0); */
+}
+
+/* Now your color classes work EXACTLY as you wanted them to! */
+.marker-delay {
+  background-color: #64a0ff;
+}
+.marker-effect, .marker-control {
+  background-color: #ff64dc;
+}
+
+
+
+    @font-face {
+      font-family: "undertale";
+      src: local("undertale"), url("https://files.catbox.moe/xd14il.ttf") format("opentype");
+      font-display: swap;
+    }
+
+    /* --- NEW: Media Query for Mobile --- */
+    .canvas-fixed-container {}
+
+    /* --- NEW: Media Query for Mobile --- */
+    @media (max-width: 744px),
+    (any-pointer: coarse) {
+      .portrait-dropdown-panel {
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 84%;
+        max-height: 100%;
+        border: none;
+        border-radius: 0;
+        position: fixed;
+      }
+
+      .portrait-dropdown-panel .close-btn {
+        display: block;
+      }
+
+      /* --- NEW STYLES FOR FIXED CANVAS --- */
+      .canvas-fixed-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        background: var(--bg);
+        border-top: 1px solid #333;
+        padding-top: 2px;
+        z-index: 50;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+
+      }
+
+      .canvas-fixed-container .small,
+      .canvas-fixed-container div {
+        margin-top: 0 !important;
+        /* Override inline styles for consistent spacing */
+      }
+
+      /* Add padding to the main wrap to avoid content being hidden */
+      .wrap {
+        padding-top: 200px;
+        /* Provides space so content can scroll above the fixed canvas */
+      }
+
+      canvas {
+        border-radius: 0px;
+        width: 100%;
+      }
+
+      /* Adjust button size for mobile */
+      .textarea-buttons button {
+        width: 35px;
+        font-size: 12px;
+      }
+    }

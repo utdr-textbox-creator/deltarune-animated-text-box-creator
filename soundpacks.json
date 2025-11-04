@@ -1,0 +1,1941 @@
+{
+    "default": {
+        "name": "Default Sound",
+        "type": "single",
+        "file": "snd_text.wav"
+    },
+    "board": {
+        "name": "Gameboard",
+        "type": "single",
+        "file": "snd_board_text_main.wav",
+        "finishSound": "snd_board_text_main_end.wav"
+    },
+    "susie": {
+        "name": "Susie",
+        "type": "single",
+        "file": "snd_txtsus.wav",
+        "defaultOffset": {
+            "x": -10,
+            "y": 0
+        },
+        "lightWorldOffset": true,
+        "images": [
+            {
+                "name": "Neutral/Calm Smirk",
+                "image": "spr_face_susie_alt_0.webp",
+                "default": true
+            },
+            {
+                "name": "Confident Smirk",
+                "image": "spr_face_susie_alt_1.webp"
+            },
+            {
+                "name": "Slight Smirk",
+                "image": "spr_face_susie_alt_2.webp"
+            },
+            {
+                "name": "Amused/Anticipation",
+                "image": "spr_face_susie_alt_3.webp"
+            },
+            {
+                "name": "Surprised/Worry",
+                "image": "spr_face_susie_alt_4.webp"
+            },
+            {
+                "name": "Confused Stare",
+                "image": "spr_face_susie_alt_5.webp"
+            },
+            {
+                "name": "Wide Happy Grin",
+                "image": "spr_face_susie_alt_6.webp"
+            },
+            {
+                "name": "Tired/Annoyed Squint",
+                "image": "spr_face_susie_alt_7.webp"
+            },
+            {
+                "name": "Annoyed Squint",
+                "image": "spr_face_susie_alt_8.webp"
+            },
+            {
+                "name": "Standard Toothy Grin",
+                "image": "spr_face_susie_alt_9.webp"
+            },
+            {
+                "name": "Mild Squint Smile",
+                "image": "spr_face_susie_alt_10.webp"
+            },
+            {
+                "name": "Open Mouth Snarl",
+                "image": "spr_face_susie_alt_11.webp"
+            },
+            {
+                "name": "Very Angry/Feral",
+                "image": "spr_face_susie_alt_12.webp"
+            },
+            {
+                "name": "Alert/Intrigued",
+                "image": "spr_face_susie_alt_13.webp"
+            },
+            {
+                "name": "Excited/Happy",
+                "image": "spr_face_susie_alt_14.webp"
+            },
+            {
+                "name": "Contented Smirk",
+                "image": "spr_face_susie_alt_15.webp"
+            },
+            {
+                "name": "Angry Smirk/Teasing",
+                "image": "spr_face_susie_alt_16.webp"
+            },
+            {
+                "name": "Tired Smile",
+                "image": "spr_face_susie_alt_17.webp"
+            },
+            {
+                "name": "Tired/Bored",
+                "image": "spr_face_susie_alt_18.webp"
+            },
+            {
+                "name": "Deeply Bored",
+                "image": "spr_face_susie_alt_19.webp"
+            },
+            {
+                "name": "Subtle Smile",
+                "image": "spr_face_susie_alt_20.webp"
+            },
+            {
+                "name": "Wide-eyed/Startled",
+                "image": "spr_face_susie_alt_21.webp"
+            },
+            {
+                "name": "Shocked/Alarmed",
+                "image": "spr_face_susie_alt_22.webp"
+            },
+            {
+                "name": "Full Aggression/Rage",
+                "image": "spr_face_susie_alt_23.webp"
+            },
+            {
+                "name": "Annoyed Grin",
+                "image": "spr_face_susie_alt_24.webp"
+            },
+            {
+                "name": "Surprised Snarl",
+                "image": "spr_face_susie_alt_25.webp"
+            },
+            {
+                "name": "Simple Happy Smile",
+                "image": "spr_face_susie_alt_26.webp"
+            },
+            {
+                "name": "Smug/Satisfied",
+                "image": "spr_face_susie_alt_27.webp"
+            },
+            {
+                "name": "Strong Smirk",
+                "image": "spr_face_susie_alt_28.webp"
+            },
+            {
+                "name": "Content",
+                "image": "spr_face_susie_alt_29.webp"
+            },
+            {
+                "name": "Slumped/Dejected",
+                "image": "spr_face_susie_alt_30.webp"
+            },
+            {
+                "name": "Aggressively Annoyed",
+                "image": "spr_face_susie_alt_31.webp"
+            },
+            {
+                "name": "Goofy Laugh",
+                "image": "spr_face_susie_alt_32.webp"
+            },
+            {
+                "name": "Simple Satisfied",
+                "image": "spr_face_susie_alt_33.webp"
+            },
+            {
+                "name": "Intense Focus/Squint",
+                "image": "spr_face_susie_alt_34.webp"
+            },
+            {
+                "name": "Dumbfounded/Upset Pout",
+                "image": "spr_face_susie_alt_35.webp"
+            },
+            {
+                "name": "Excited (w/Glasses)",
+                "image": "spr_face_susie_alt_36.webp"
+            }
+        ]
+    },
+    "ralsei": {
+        "name": "Ralsei",
+        "type": "single",
+        "file": "snd_txtral.wav",
+        "defaultOffset": {
+            "x": -15,
+            "y": -10
+        },
+        "images": [
+            {
+                "image": "spr_face_r_blood_0.webp",
+                "type": 1
+            },
+            {
+                "image": "spr_face_r_blood_1.webp",
+                "type": 1
+            },
+            {
+                "name": "Ralsei with a neutral, slightly smiling expression.",
+                "image": "spr_face_r_nohat_0.webp",
+                "default": true
+            },
+            {
+                "name": "Ralsei with a gentle, happy smile and slightly closed eyes.",
+                "image": "spr_face_r_nohat_1.webp"
+            },
+            {
+                "name": "Ralsei blushing with a happy, closed-eye smile.",
+                "image": "spr_face_r_nohat_2.webp"
+            },
+            {
+                "name": "Ralsei looking slightly to the side with a small smile.",
+                "image": "spr_face_r_nohat_3.webp"
+            },
+            {
+                "name": "Ralsei looking concerned with a neutral expression.",
+                "image": "spr_face_r_nohat_4.webp"
+            },
+            {
+                "name": "Ralsei with a slight, almost mischievous smile.",
+                "image": "spr_face_r_nohat_5.webp"
+            },
+            {
+                "name": "Ralsei looking sad with a downturned mouth.",
+                "image": "spr_face_r_nohat_6.webp"
+            },
+            {
+                "name": "Ralsei looking sad and worried.",
+                "image": "spr_face_r_nohat_7.webp"
+            },
+            {
+                "name": "Ralsei looking downcast and sad with closed eyes.",
+                "image": "spr_face_r_nohat_8.webp"
+            },
+            {
+                "name": "Ralsei with a neutral, straight-mouthed expression.",
+                "image": "spr_face_r_nohat_9.webp"
+            },
+            {
+                "name": "Ralsei smiling happily.",
+                "image": "spr_face_r_nohat_10.webp"
+            },
+            {
+                "name": "Ralsei with a gentle, kind smile.",
+                "image": "spr_face_r_nohat_11.webp"
+            },
+            {
+                "name": "Ralsei looking shocked with wide eyes and an open mouth.",
+                "image": "spr_face_r_nohat_12.webp"
+            },
+            {
+                "name": "Ralsei with a worried, slightly blushing expression.",
+                "image": "spr_face_r_nohat_13.webp"
+            },
+            {
+                "name": "Ralsei looking angry with furrowed brows.",
+                "image": "spr_face_r_nohat_14.webp"
+            },
+            {
+                "name": "Ralsei looking angry and glancing to the side.",
+                "image": "spr_face_r_nohat_15.webp"
+            },
+            {
+                "name": "Ralsei winking with a smile.",
+                "image": "spr_face_r_nohat_16.webp"
+            },
+            {
+                "name": "Ralsei with a very happy, open-mouthed expression and blushing.",
+                "image": "spr_face_r_nohat_17.webp"
+            },
+            {
+                "name": "Ralsei with a calm, neutral expression.",
+                "image": "spr_face_r_nohat_18.webp"
+            },
+            {
+                "name": "Ralsei looking upwards with a happy expression.",
+                "image": "spr_face_r_nohat_19.webp"
+            },
+            {
+                "name": "Ralsei with a wide-eyed, neutral expression.",
+                "image": "spr_face_r_nohat_20.webp"
+            },
+            {
+                "name": "Ralsei looking upwards with a concerned expression.",
+                "image": "spr_face_r_nohat_21.webp"
+            },
+            {
+                "name": "Ralsei with a straight-mouthed, slightly concerned look.",
+                "image": "spr_face_r_nohat_22.webp"
+            },
+            {
+                "name": "Ralsei with a determined, slightly angry expression.",
+                "image": "spr_face_r_nohat_23.webp"
+            },
+            {
+                "name": "Ralsei blushing with a concerned look.",
+                "image": "spr_face_r_nohat_24.webp"
+            },
+            {
+                "name": "Ralsei with a happy, tongue-out expression and closed eyes.",
+                "image": "spr_face_r_nohat_25.webp"
+            },
+            {
+                "name": "Ralsei smiling with closed eyes.",
+                "image": "spr_face_r_nohat_26.webp"
+            },
+            {
+                "name": "Ralsei looking annoyed or unimpressed.",
+                "image": "spr_face_r_nohat_27.webp"
+            },
+            {
+                "name": "Ralsei with a smug, smiling expression with eyelashes.",
+                "image": "spr_face_r_nohat_28.webp"
+            },
+            {
+                "name": "Ralsei with cool, shaded glasses.",
+                "image": "spr_face_r_nohat_29.webp"
+            },
+            {
+                "name": "Ralsei with a toothy, goofy grin.",
+                "image": "spr_face_r_nohat_30.webp"
+            },
+            {
+                "name": "Ralsei looking very angry and clenching his teeth.",
+                "image": "spr_face_r_nohat_31.webp"
+            },
+            {
+                "name": "Ralsei shouting in anger.",
+                "image": "spr_face_r_nohat_32.webp"
+            },
+            {
+                "name": "Ralsei sighing or speaking with closed eyes.",
+                "image": "spr_face_r_nohat_33.webp"
+            },
+            {
+                "name": "Ralsei looking scared or worried.",
+                "image": "spr_face_r_nohat_34.webp"
+            },
+            {
+                "name": "Ralsei with a scared and blushing expression.",
+                "image": "spr_face_r_nohat_35.webp"
+            },
+            {
+                "name": "Ralsei looking downcast and disappointed.",
+                "image": "spr_face_r_nohat_36.webp"
+            },
+            {
+                "name": "Ralsei with a sad, closed-eye expression.",
+                "image": "spr_face_r_nohat_37.webp"
+            },
+            {
+                "name": "Ralsei looking tired or disappointed with eyes closed.",
+                "image": "spr_face_r_nohat_38.webp"
+            },
+            {
+                "name": "Ralsei looking concerned and questioning.",
+                "image": "spr_face_r_nohat_39.webp"
+            },
+            {
+                "name": "Ralsei with a happy, gentle closed-eye smile.",
+                "image": "spr_face_r_nohat_40.webp"
+            },
+            {
+                "name": "Ralsei with his face shadowed and eyes closed.",
+                "image": "spr_face_r_nohat_41.webp"
+            },
+            {
+                "name": "Ralsei with a scared expression and trembling mouth.",
+                "image": "spr_face_r_nohat_42.webp"
+            },
+            {
+                "name": "Ralsei looking worried with a trembling mouth.",
+                "image": "spr_face_r_nohat_43.webp"
+            },
+            {
+                "name": "Ralsei with a confident, smug smile.",
+                "image": "spr_face_r_nohat_44.webp"
+            },
+            {
+                "name": "Ralsei smiling confidently with a closed mouth.",
+                "image": "spr_face_r_nohat_45.webp"
+            },
+            {
+                "name": "Ralsei with a very concerned, wide-eyed look.",
+                "image": "spr_face_r_nohat_46.webp"
+            },
+            {
+                "name": "Ralsei looking concerned and speaking.",
+                "image": "spr_face_r_nohat_47.webp"
+            },
+            {
+                "name": "Ralsei with his face shadowed and eyes closed.",
+                "image": "spr_face_r_nohat_48.webp"
+            },
+            {
+                "name": "Ralsei with face shadowed, eyes closed, and looking down.",
+                "image": "spr_face_r_nohat_49.webp"
+            },
+            {
+                "name": "Ralsei looking shocked, with irises visible.",
+                "image": "spr_face_r_nohat_50.webp"
+            },
+            {
+                "name": "Ralsei looking to the side with a straight face.",
+                "image": "spr_face_r_nohat_51.webp"
+            },
+            {
+                "name": "Ralsei looking sideways with a neutral expression.",
+                "image": "spr_face_r_nohat_52.webp"
+            }
+        ]
+    },
+    "noelle": {
+        "name": "Noelle",
+        "type": "single",
+        "file": "snd_txtnoe.wav",
+        "defaultOffset": {
+            "x": -24,
+            "y": -20
+        },
+        "lightWorldOffset": true,
+        "images": [
+            {
+                "name": "Neutral",
+                "image": "spr_face_n_matome_0.webp",
+                "imageWidthOffset": -24,
+                "imageHeightOffset": -20,
+                "default": true
+            },
+            {
+                "name": "Happy",
+                "image": "spr_face_n_matome_1.webp",
+                "imageWidthOffset": -24,
+                "imageHeightOffset": -20
+            },
+            {
+                "name": "Gentle Smile",
+                "image": "spr_face_n_matome_2.webp",
+                "imageWidthOffset": -24,
+                "imageHeightOffset": -20
+            },
+            {
+                "name": "Slightly Sad",
+                "image": "spr_face_n_matome_3.webp",
+                "imageWidthOffset": -24,
+                "imageHeightOffset": -20
+            },
+            {
+                "name": "Surprised",
+                "image": "spr_face_n_matome_4.webp",
+                "imageWidthOffset": -24,
+                "imageHeightOffset": -20
+            },
+            {
+                "name": "Scared",
+                "image": "spr_face_n_matome_5.webp",
+                "imageWidthOffset": -24,
+                "imageHeightOffset": -20
+            },
+            {
+                "name": "Excited",
+                "image": "spr_face_n_matome_6.webp",
+                "imageWidthOffset": -24,
+                "imageHeightOffset": -20
+            },
+            {
+                "name": "Very Scared",
+                "image": "spr_face_n_matome_7.webp",
+                "imageWidthOffset": -24,
+                "imageHeightOffset": -20
+            },
+            {
+                "name": "Scared Open Mouth",
+                "image": "spr_face_n_matome_8.webp",
+                "imageWidthOffset": -24,
+                "imageHeightOffset": -20
+            },
+            {
+                "name": "Thinking with Glasses",
+                "image": "spr_face_n_matome_9.webp",
+                "imageWidthOffset": -24,
+                "imageHeightOffset": -20
+            },
+            {
+                "name": "Smug with Glasses",
+                "image": "spr_face_n_matome_10.webp",
+                "imageWidthOffset": -24,
+                "imageHeightOffset": -20
+            },
+            {
+                "name": "Happy with Glasses",
+                "image": "spr_face_n_matome_11.webp",
+                "imageWidthOffset": -24,
+                "imageHeightOffset": -20
+            },
+            {
+                "name": "Excited Up",
+                "image": "spr_face_n_matome_12.webp",
+                "imageWidthOffset": -24,
+                "imageHeightOffset": -20
+            },
+            {
+                "name": "Very Excited",
+                "image": "spr_face_n_matome_13.webp",
+                "imageWidthOffset": -24,
+                "imageHeightOffset": -20
+            },
+            {
+                "name": "Blushing Scared",
+                "image": "spr_face_n_matome_14.webp",
+                "imageWidthOffset": -24,
+                "imageHeightOffset": -20
+            },
+            {
+                "name": "Blushing Happy",
+                "image": "spr_face_n_matome_15.webp",
+                "imageWidthOffset": -24,
+                "imageHeightOffset": -20
+            },
+            {
+                "name": "Blushing Scared Open Mouth",
+                "image": "spr_face_n_matome_16.webp",
+                "imageWidthOffset": -24,
+                "imageHeightOffset": -20
+            },
+            {
+                "name": "Blushing Excited",
+                "image": "spr_face_n_matome_17.webp",
+                "imageWidthOffset": -24,
+                "imageHeightOffset": -20
+            },
+            {
+                "name": "Blushing Excited Up",
+                "image": "spr_face_n_matome_18.webp",
+                "imageWidthOffset": -24,
+                "imageHeightOffset": -20
+            },
+            {
+                "name": "Smug",
+                "image": "spr_face_n_matome_19.webp",
+                "imageWidthOffset": -24,
+                "imageHeightOffset": -20
+            },
+            {
+                "name": "Smug Laughing",
+                "image": "spr_face_n_matome_20.webp",
+                "imageWidthOffset": -24,
+                "imageHeightOffset": -20
+            },
+            {
+                "name": "Dark Excited",
+                "image": "spr_face_n_matome_21.webp",
+                "imageWidthOffset": -24,
+                "imageHeightOffset": -20
+            },
+            {
+                "name": "Dark Blushing",
+                "image": "spr_face_n_matome_22.webp",
+                "imageWidthOffset": -24,
+                "imageHeightOffset": -20
+            },
+            {
+                "name": "Dark Happy",
+                "image": "spr_face_n_matome_23.webp",
+                "imageWidthOffset": -24,
+                "imageHeightOffset": -20
+            },
+            {
+                "name": "Angry",
+                "image": "spr_face_n_matome_24.webp",
+                "imageWidthOffset": -24,
+                "imageHeightOffset": -20
+            },
+            {
+                "name": "Dark Angry",
+                "image": "spr_face_n_matome_25.webp",
+                "imageWidthOffset": -24,
+                "imageHeightOffset": -20
+            },
+            {
+                "name": "Dark Scared",
+                "image": "spr_face_n_matome_26.webp",
+                "imageWidthOffset": -24,
+                "imageHeightOffset": -20
+            },
+            {
+                "name": "Dark Scared Open Mouth",
+                "image": "spr_face_n_matome_27.webp",
+                "imageWidthOffset": -24,
+                "imageHeightOffset": -20
+            },
+            {
+                "name": "Tired",
+                "image": "spr_face_n_matome_28.webp",
+                "imageWidthOffset": -24,
+                "imageHeightOffset": -20
+            },
+            {
+                "name": "Dark Thinking",
+                "image": "spr_face_n_matome_29.webp",
+                "imageWidthOffset": -24,
+                "imageHeightOffset": -20
+            },
+            {
+                "name": "Dark Smug",
+                "image": "spr_face_n_matome_30.webp",
+                "imageWidthOffset": -24,
+                "imageHeightOffset": -20
+            },
+            {
+                "name": "Dark Sad",
+                "image": "spr_face_n_matome_31.webp",
+                "imageWidthOffset": -24,
+                "imageHeightOffset": -20
+            },
+            {
+                "name": "Dark Crying",
+                "image": "spr_face_n_matome_32.webp",
+                "imageWidthOffset": -24,
+                "imageHeightOffset": -20
+            },
+            {
+                "name": "Shouting",
+                "image": "spr_face_n_matome_33.webp",
+                "imageWidthOffset": -24,
+                "imageHeightOffset": -20
+            },
+            {
+                "name": "Tongue Out",
+                "image": "spr_face_n_matome_34.webp",
+                "imageWidthOffset": -24,
+                "imageHeightOffset": -20
+            },
+            {
+                "name": "Crazy",
+                "image": "spr_face_n_matome_35.webp",
+                "imageWidthOffset": -24,
+                "imageHeightOffset": -20
+            },
+            {
+                "name": "Crazy Happy",
+                "image": "spr_face_n_matome_36.webp",
+                "imageWidthOffset": -24,
+                "imageHeightOffset": -20
+            },
+            {
+                "name": "Dark Scared 2",
+                "image": "spr_face_n_matome_37.webp",
+                "imageWidthOffset": -24,
+                "imageHeightOffset": -20
+            },
+            {
+                "name": "Dark Crazy",
+                "image": "spr_face_n_matome_38.webp",
+                "imageWidthOffset": -24,
+                "imageHeightOffset": -20
+            },
+            {
+                "name": "Dark Mad",
+                "image": "spr_face_n_matome_39.webp",
+                "imageWidthOffset": -24,
+                "imageHeightOffset": -20
+            },
+            {
+                "name": "Very Mad",
+                "image": "spr_face_n_matome_40.webp",
+                "imageWidthOffset": -24,
+                "imageHeightOffset": -20
+            },
+            {
+                "name": "Extremely Mad",
+                "image": "spr_face_n_matome_41.webp",
+                "imageWidthOffset": -24,
+                "imageHeightOffset": -20
+            },
+            {
+                "name": "Dark Happy 2",
+                "image": "spr_face_n_matome_42.webp",
+                "imageWidthOffset": -24,
+                "imageHeightOffset": -20
+            },
+            {
+                "name": "Dark Neutral",
+                "image": "spr_face_n_matome_43.webp",
+                "imageWidthOffset": -24,
+                "imageHeightOffset": -20
+            },
+            {
+                "name": "Dark Blushing Happy",
+                "image": "spr_face_n_matome_44.webp",
+                "imageWidthOffset": -24,
+                "imageHeightOffset": -20
+            },
+            {
+                "name": "Dark Blushing Happy 2",
+                "image": "spr_face_n_matome_45.webp",
+                "imageWidthOffset": -24,
+                "imageHeightOffset": -20
+            },
+            {
+                "name": "Dark Very Happy",
+                "image": "spr_face_n_matome_46.webp",
+                "imageWidthOffset": -24,
+                "imageHeightOffset": -20
+            },
+            {
+                "name": "Dark Worried",
+                "image": "spr_face_n_matome_47.webp",
+                "imageWidthOffset": -24,
+                "imageHeightOffset": -20
+            },
+            {
+                "name": "Dark Blushing Up",
+                "image": "spr_face_n_matome_48.webp",
+                "imageWidthOffset": -24,
+                "imageHeightOffset": -20
+            }
+        ]
+    },
+    "berdly": {
+        "name": "Berdly",
+        "type": "single",
+        "file": "snd_txtber.wav",
+        "defaultOffset": {
+            "x": -20,
+            "y": 0
+        },
+        "lightWorldOffset": true,
+        "images": [
+            {
+                "name": "Distressed, distorted",
+                "image": "spr_face_b2_0.webp",
+                "default": true
+            },
+            {
+                "name": "Surprised",
+                "image": "spr_face_berdly_3.webp"
+            },
+            {
+                "name": "Pleased",
+                "image": "spr_face_berdly_4.webp"
+            },
+            {
+                "name": "Smug",
+                "image": "spr_face_berdly_5.webp"
+            },
+            {
+                "name": "Laughing",
+                "image": "spr_face_berdly_6.webp"
+            },
+            {
+                "name": "Crying laugh",
+                "image": "spr_face_berdly_7.webp"
+            },
+            {
+                "name": "Annoyed, eyes closed",
+                "image": "spr_face_berdly_8.webp"
+            },
+            {
+                "name": "Annoyed, squinting",
+                "image": "spr_face_berdly_9.webp"
+            },
+            {
+                "name": "Annoyed, glaring",
+                "image": "spr_face_berdly_10.webp"
+            },
+            {
+                "name": "Annoyed smile",
+                "image": "spr_face_berdly_11.webp"
+            },
+            {
+                "name": "Nervous smile",
+                "image": "spr_face_berdly_12.webp"
+            },
+            {
+                "name": "Gaping laugh",
+                "image": "spr_face_berdly_13.webp"
+            },
+            {
+                "name": "Neutral",
+                "image": "spr_face_berdly_14.webp"
+            },
+            {
+                "name": "Talking",
+                "image": "spr_face_berdly_15.webp"
+            },
+            {
+                "name": "Frowning",
+                "image": "spr_face_berdly_16.webp"
+            },
+            {
+                "name": "Worried",
+                "image": "spr_face_berdly_17.webp"
+            },
+            {
+                "name": "Happy, open mouth",
+                "image": "spr_face_berdly_18.webp"
+            },
+            {
+                "name": "Smug, looking down",
+                "image": "spr_face_berdly_19.webp"
+            },
+            {
+                "name": "Content",
+                "image": "spr_face_berdly_20.webp"
+            },
+            {
+                "name": "Thinking",
+                "image": "spr_face_berdly_21.webp"
+            },
+            {
+                "name": "Smug, looking away",
+                "image": "spr_face_berdly_22.webp"
+            },
+            {
+                "name": "Annoyed",
+                "image": "spr_face_berdly_23.webp"
+            },
+            {
+                "name": "Glitching, pained",
+                "image": "spr_face_berdly_24.webp"
+            },
+            {
+                "name": "Neutral, headphones",
+                "image": "spr_face_berdly_dark_0.webp",
+                "category": "Dark World"
+            },
+            {
+                "name": "Slight smile, headphones",
+                "image": "spr_face_berdly_dark_1.webp",
+                "category": "Dark World"
+            },
+            {
+                "name": "Distressed, headphones",
+                "image": "spr_face_berdly_dark_2.webp",
+                "category": "Dark World"
+            },
+            {
+                "name": "Shocked, headphones",
+                "image": "spr_face_berdly_dark_3.webp",
+                "category": "Dark World"
+            },
+            {
+                "name": "Happy, headphones",
+                "image": "spr_face_berdly_dark_4.webp",
+                "category": "Dark World"
+            },
+            {
+                "name": "Smug, headphones",
+                "image": "spr_face_berdly_dark_5.webp",
+                "category": "Dark World"
+            },
+            {
+                "name": "Laughing, headphones",
+                "image": "spr_face_berdly_dark_6.webp",
+                "category": "Dark World"
+            },
+            {
+                "name": "Crying laugh, headphones",
+                "image": "spr_face_berdly_dark_7.webp",
+                "category": "Dark World"
+            },
+            {
+                "name": "Annoyed, eyes closed, headphones",
+                "image": "spr_face_berdly_dark_8.webp",
+                "category": "Dark World"
+            },
+            {
+                "name": "Annoyed, squinting, headphones",
+                "image": "spr_face_berdly_dark_9.webp",
+                "category": "Dark World"
+            },
+            {
+                "name": "Annoyed, glaring, headphones",
+                "image": "spr_face_berdly_dark_10.webp",
+                "category": "Dark World"
+            },
+            {
+                "name": "Annoyed smile, headphones",
+                "image": "spr_face_berdly_dark_11.webp",
+                "category": "Dark World"
+            },
+            {
+                "name": "Nervous smile, headphones",
+                "image": "spr_face_berdly_dark_12.webp",
+                "category": "Dark World"
+            },
+            {
+                "name": "Gaping laugh, headphones",
+                "image": "spr_face_berdly_dark_13.webp",
+                "category": "Dark World"
+            },
+            {
+                "name": "Neutral, mouth closed, headphones",
+                "image": "spr_face_berdly_dark_14.webp",
+                "category": "Dark World"
+            },
+            {
+                "name": "Talking, headphones",
+                "image": "spr_face_berdly_dark_15.webp",
+                "category": "Dark World"
+            },
+            {
+                "name": "Frowning, headphones",
+                "image": "spr_face_berdly_dark_16.webp",
+                "category": "Dark World"
+            },
+            {
+                "name": "Worried, headphones",
+                "image": "spr_face_berdly_dark_17.webp",
+                "category": "Dark World"
+            },
+            {
+                "name": "Happy, open mouth, headphones",
+                "image": "spr_face_berdly_dark_18.webp",
+                "category": "Dark World"
+            },
+            {
+                "name": "Smug, looking down, headphones",
+                "image": "spr_face_berdly_dark_19.webp",
+                "category": "Dark World"
+            },
+            {
+                "name": "Content, headphones",
+                "image": "spr_face_berdly_dark_20.webp",
+                "category": "Dark World"
+            },
+            {
+                "name": "Thinking, headphones",
+                "image": "spr_face_berdly_dark_21.webp",
+                "category": "Dark World"
+            },
+            {
+                "name": "Smug, looking away, headphones",
+                "image": "spr_face_berdly_dark_22.webp",
+                "category": "Dark World"
+            },
+            {
+                "name": "Annoyed, headphones",
+                "image": "spr_face_berdly_dark_23.webp",
+                "category": "Dark World"
+            }
+        ]
+    },
+    "Rudy": {
+        "name": "Rudy",
+        "type": "single",
+        "file": "snd_txtrud.wav",
+        "defaultOffset": {
+            "x": -24,
+            "y": -20
+        },
+        "images": [
+            {
+                "name": "Smug grin",
+                "image": "spr_face_rudy_0.webp",
+                "default": true
+            },
+            {
+                "name": "Neutral",
+                "image": "spr_face_rudy_1.webp"
+            },
+            {
+                "name": "Happy",
+                "image": "spr_face_rudy_2.webp"
+            },
+            {
+                "name": "Frowning",
+                "image": "spr_face_rudy_3.webp"
+            },
+            {
+                "name": "Sad",
+                "image": "spr_face_rudy_4.webp"
+            },
+            {
+                "name": "Weak smile",
+                "image": "spr_face_rudy_5.webp"
+            },
+            {
+                "name": "Angry",
+                "image": "spr_face_rudy_6.webp"
+            },
+            {
+                "name": "Laughing",
+                "image": "spr_face_rudy_7.webp"
+            }
+        ]
+    },
+    "carol": {
+        "name": "Carol",
+        "type": "single",
+        "file": "snd_txtcar.wav",
+        "defaultOffset": {
+            "x": -18,
+            "y": -8
+        },
+        "images": [
+            {
+                "name": "Neutral",
+                "image": "spr_face_carol_0.webp",
+                "default": true
+            },
+            {
+                "name": "Neutral",
+                "image": "spr_face_carol_1.webp"
+            },
+            {
+                "name": "Smiling",
+                "image": "spr_face_carol_2.webp"
+            },
+            {
+                "name": "Smiling",
+                "image": "spr_face_carol_3.webp"
+            },
+            {
+                "name": "Surprised",
+                "image": "spr_face_carol_4.webp"
+            },
+            {
+                "name": "Shocked",
+                "image": "spr_face_carol_5.webp"
+            },
+            {
+                "name": "Sad",
+                "image": "spr_face_carol_6.webp"
+            },
+            {
+                "name": "Smirking",
+                "image": "spr_face_carol_7.webp"
+            },
+            {
+                "name": "Eyes closed",
+                "image": "spr_face_carol_8.webp"
+            },
+            {
+                "name": "Eyes closed",
+                "image": "spr_face_carol_9.webp"
+            }
+        ]
+    },
+    "toriel": {
+        "name": "Toriel",
+        "type": "single",
+        "images": [
+            {
+                "name": "Happy",
+                "image": "spr_face_t0_0.webp",
+                "imageMouth": "spr_face_t0_1.webp",
+                "default": true,
+                "type": 0
+            },
+            {
+                "name": "Happy side glance",
+                "image": "spr_face_t1_0.webp",
+                "imageMouth": "spr_face_t1_1.webp",
+                "type": 0
+            },
+            {
+                "name": "Sad",
+                "image": "spr_face_t2_0.webp",
+                "imageMouth": "spr_face_t2_1.webp",
+                "type": 0
+            },
+            {
+                "name": "Smiling",
+                "image": "spr_face_t3_0.webp",
+                "type": 0
+            },
+            {
+                "name": "Stern",
+                "image": "spr_face_t4_0.webp",
+                "type": 0
+            },
+            {
+                "name": "Smiling sweetly",
+                "image": "spr_face_t5_0.webp",
+                "type": 0
+            },
+            {
+                "name": "Skeptical",
+                "image": "spr_face_t6_0.webp",
+                "imageMouth": "spr_face_t6_1.webp",
+                "type": 0
+            },
+            {
+                "name": "Serious",
+                "image": "spr_face_t7_0.webp",
+                "imageMouth": "spr_face_t7_1.webp",
+                "type": 0
+            },
+            {
+                "name": "Shocked",
+                "image": "spr_face_t8_0.webp",
+                "type": 0
+            },
+            {
+                "name": "Upset",
+                "image": "spr_face_t9_0.webp",
+                "imageMouth": "spr_face_t9_1.webp",
+                "type": 0
+            },
+            {
+                "image": "spr_face_tbody.png",
+                "imageWidthOffset": -14,
+                "imageHeightOffset": 58,
+                "type": 1,
+                "default": true
+            },
+            {
+                "image": "spr_face_tbody_church.png",
+                "imageWidthOffset": -16,
+                "imageHeightOffset": 56,
+                "type": 1
+            },
+            {
+                "image": "spr_face_torielblush.webp",
+                "type": 2
+            }
+        ],
+        "file": "snd_txttor.wav"
+    },
+    "sans": {
+        "name": "Sans",
+        "type": "single",
+        "file": "snd_txtsans.wav",
+        "playEveryN": 2,
+        "monophonic": true,
+        "images": [
+            {
+                "image": "spr_face_sans0_0.png",
+                "default": true
+            },
+            {
+                "image": "spr_face_sans1_0.png"
+            },
+            {
+                "image": "spr_face_sans2_0.png"
+            },
+            {
+                "image": "spr_face_sans3_0.png"
+            },
+            {
+                "image": "spr_face_sans4_0.png"
+            },
+            {
+                "image": "spr_face_sans5_0.png"
+            }
+        ]
+    },
+    "pap": {
+        "name": "Papyrus",
+        "type": "single",
+        "file": "snd_txtpap.wav"
+    },
+    "undyne": {
+        "name": "Undyne",
+        "type": "single",
+        "file": "snd_txtund.wav",
+        "defaultOffset": {
+            "x": -20,
+            "y": 0
+        },
+        "lightWorldOffset": true,
+        "images": [
+            {
+                "name": "Smirk",
+                "image": "spr_face_undyne_0.webp",
+                "default": true
+            },
+            {
+                "name": "Talking smirk",
+                "image": "spr_face_undyne_1.webp"
+            },
+            {
+                "name": "Determined",
+                "image": "spr_face_undyne_2.webp"
+            },
+            {
+                "name": "Shouting",
+                "image": "spr_face_undyne_3.webp"
+            },
+            {
+                "name": "Angry",
+                "image": "spr_face_undyne_4.webp"
+            },
+            {
+                "name": "Wild laugh",
+                "image": "spr_face_undyne_5.webp"
+            },
+            {
+                "name": "Laughing",
+                "image": "spr_face_undyne_6.webp"
+            },
+            {
+                "name": "Laughing",
+                "image": "spr_face_undyne_7.webp"
+            },
+             {
+                "name": "Hatless Determined",
+                "image": "spr_face_undyne_8.webp"
+            },
+             {
+                "name": "Hatless Smirk",
+                "image": "spr_face_undyne_9.webp"
+            }
+        ]
+    },
+    "al": {
+        "name": "Alphys",
+        "type": "single",
+        "file": "snd_txtal.wav",
+        "defaultOffset": {
+            "x": -20,
+            "y": 0
+        },
+        "images": [
+            {
+                "name": "Smiling",
+                "image": "spr_alphysface_0.webp",
+                "default": true
+            },
+            {
+                "name": "Smiling",
+                "image": "spr_alphysface_1.webp"
+            },
+            {
+                "name": "Smiling",
+                "image": "spr_alphysface_2.webp"
+            },
+            {
+                "name": "Concerned",
+                "image": "spr_alphysface_3.webp"
+            },
+            {
+                "name": "Nervous",
+                "image": "spr_alphysface_4.webp"
+            },
+            {
+                "name": "Excited",
+                "image": "spr_alphysface_5.webp"
+            },
+            {
+                "name": "Sweating",
+                "image": "spr_alphysface_6.webp"
+            },
+            {
+                "name": "Blushing",
+                "image": "spr_alphysface_7.webp"
+            },
+            {
+                "name": "Disappointed",
+                "image": "spr_alphysface_8.webp"
+            },
+            {
+                "name": "Eager",
+                "image": "spr_alphysface_9.webp"
+            },
+            {
+                "name": "Smug",
+                "image": "spr_alphysface_10.webp"
+            },
+            {
+                "name": "Giddy",
+                "image": "spr_alphysface_11.webp"
+            },
+            {
+                "name": "Smiling",
+                "image": "spr_alphysface_12.webp"
+            }
+        ]
+    },
+    "asgore": {
+        "name": "Asgore",
+        "type": "single",
+        "file": "snd_txtasg.wav",
+        "defaultOffset": {
+            "x": -20,
+            "y": 0
+        },
+        "images": [
+            {
+                "name": "Neutral",
+                "image": "spr_face_asgore0_0.webp",
+                "imageMouth": "spr_face_asgore0_1.webp",
+                "default": true
+            },
+            {
+                "name": "Concerned",
+                "image": "spr_face_asgore1_0.webp",
+                "imageMouth": "spr_face_asgore1_1.webp"
+            },
+            {
+                "name": "Sad",
+                "image": "spr_face_asgore2_0.webp"
+            },
+            {
+                "name": "Pained",
+                "image": "spr_face_asgore3_0.webp",
+                "imageMouth": "spr_face_asgore3_1.webp"
+            },
+            {
+                "name": "Happy",
+                "image": "spr_face_asgore4_0.webp",
+                "imageMouth": "spr_face_asgore4_1.webp"
+            },
+            {
+                "name": "Joyful",
+                "image": "spr_face_asgore5_0.webp"
+            },
+            {
+                "name": "Winking",
+                "image": "spr_face_asgore6_0.webp",
+                "imageMouth": "spr_face_asgore6_1.webp"
+            },
+            {
+                "name": "Worried",
+                "image": "spr_face_asgore7_0.webp"
+            },
+            {
+                "name": "Angry",
+                "image": "spr_face_asgore8_0.webp"
+            }
+        ]
+    },
+    "lancer": {
+        "name": "Lancer",
+        "type": "single",
+        "file": "snd_txtlan.wav",
+        "defaultOffset": {
+            "x": -15,
+            "y": -10
+        },
+        "images": [
+            {
+                "name": "Mischievous",
+                "image": "spr_face_l0_0.webp",
+                "default": true
+            },
+            {
+                "name": "Mischievous",
+                "image": "spr_face_l0_1.webp"
+            },
+            {
+                "name": "Laughing",
+                "image": "spr_face_l0_2.webp"
+            },
+            {
+                "name": "Smug",
+                "image": "spr_face_l0_3.webp"
+            },
+            {
+                "name": "Pouty",
+                "image": "spr_face_l0_4.webp"
+            },
+            {
+                "name": "Sad",
+                "image": "spr_face_l0_5.webp"
+            },
+            {
+                "name": "Neutral",
+                "image": "spr_face_l0_6.webp"
+            },
+            {
+                "name": "Content",
+                "image": "spr_face_l0_7.webp"
+            },
+            {
+                "name": "Smirk",
+                "image": "spr_face_l0_8.webp"
+            },
+            {
+                "name": "Evil grin",
+                "image": "spr_face_l0_9.webp"
+            },
+            {
+                "name": "Dejected",
+                "image": "spr_face_l0_10.webp"
+            },
+            {
+                "name": "Upset",
+                "image": "spr_face_l0_11.webp"
+            },
+            {
+                "name": "Surprised",
+                "image": "spr_face_l0_12.webp"
+            },
+            {
+                "name": "Cool",
+                "image": "spr_face_l0_13.webp"
+            },
+            {
+                "name": "Cool",
+                "image": "spr_face_l0_14.webp"
+            }
+        ]
+    },
+     "rurus": {
+        "name": "Rouxls Kaard",
+        "type": "single",
+        "file": "snd_text.wav",
+        "defaultOffset": {
+            "x": -10,
+            "y": 0
+        },
+        "images": [
+            {
+                "name": "Grinning",
+                "image": "spr_face_rurus_0.webp",
+                "default": true
+            },
+            {
+                "name": "Wide grin",
+                "image": "spr_face_rurus_1.webp"
+            },
+            {
+                "name": "Tongue out",
+                "image": "spr_face_rurus_2.webp"
+            },
+            {
+                "name": "Neutral grin",
+                "image": "spr_face_rurus_3.webp"
+            },
+            {
+                "name": "Smug",
+                "image": "spr_face_rurus_4.webp"
+            },
+            {
+                "name": "Excited",
+                "image": "spr_face_rurus_5.webp"
+            },
+            {
+                "name": "Happy",
+                "image": "spr_face_rurus_6.webp"
+            },
+            {
+                "name": "Pirate Hat",
+                "image": "spr_face_rurus_piratehat_0.webp",
+                "imageWidthOffset": -16,
+                "imageHeightOffset": -8,
+                "type": "1"
+            }   
+            
+        ]
+    },
+    "king": {
+        "name": "King",
+        "type": "single",
+        "file": "snd_dadtxt.wav",
+        "defaultOffset": {
+            "x": -5,
+            "y": -5
+        },
+        "images": [
+            {
+                "name": "Menacing",
+                "image": "spr_face_king_0.webp",
+                "default": true
+            },
+            {
+                "name": "Neutral",
+                "image": "spr_face_king_1.webp"
+            },
+            {
+                "name": "Smiling",
+                "image": "spr_face_king_2.webp"
+            },
+            {
+                "name": "Sad",
+                "image": "spr_face_king_3.webp"
+            },
+            {
+                "name": "Snarling",
+                "image": "spr_face_king_4.webp"
+            },
+            {
+                "name": "Laughing",
+                "image": "spr_face_king_5.webp"
+            },
+            {
+                "name": "Mouth agape",
+                "image": "spr_face_king_6.webp"
+            },
+            {
+                "name": "Staring",
+                "image": "spr_face_king_7.webp"
+            },
+            {
+                "name": "Content",
+                "image": "spr_face_king_8.webp"
+            },
+            {
+                "name": "Speaking",
+                "image": "spr_face_king_9.webp"
+            },
+            {
+                "name": "Pained",
+                "image": "spr_face_king_10.webp"
+            },
+            {
+                "name": "Smug",
+                "image": "spr_face_king_11.webp"
+            },
+            {
+                "name": "Annoyed",
+                "image": "spr_face_king_12.webp"
+            },
+            {
+                "name": "Furious",
+                "image": "spr_face_king_13.webp"
+            }
+        ]
+    },
+    "queen": {
+        "name": "Queen",
+        "type": "single",
+        "playEveryN": 2,
+        "defaultMinPitch": 0.9,
+        "defaultMaxPitch": 1.05,
+        "file": "snd_txtq_2.wav",
+        "images": [
+            {
+                "name": "Smug",
+                "image": "spr_face_queen_0.webp",
+                "default": true
+            },
+            {
+                "name": "Laughing",
+                "image": "spr_face_queen_1.webp"
+            },
+            {
+                "name": "Surprised",
+                "image": "spr_face_queen_2.webp"
+            },
+            {
+                "name": "Neutral",
+                "image": "spr_face_queen_3.webp"
+            },
+            {
+                "name": "Stern",
+                "image": "spr_face_queen_4.webp"
+            },
+            {
+                "name": "Blank",
+                "image": "spr_face_queen_5.webp"
+            },
+            {
+                "name": "Evil laugh",
+                "image": "spr_face_queen_6.webp"
+            },
+            {
+                "name": "Mad",
+                "image": "spr_face_queen_7.webp"
+            },
+            {
+                "name": "Shocked",
+                "image": "spr_face_queen_8.webp"
+            },
+            {
+                "name": "Laughing",
+                "image": "spr_face_queen_9.webp"
+            },
+            {
+                "name": "Laughing",
+                "image": "spr_face_queen_10.webp"
+            },
+            {
+                "name": "Laughing",
+                "image": "spr_face_queen_11.webp"
+            },
+            {
+                "name": "Grinning",
+                "image": "spr_face_queen_12.webp"
+            },
+            {
+                "name": "Laughing",
+                "image": "spr_face_queen_13.webp"
+            },
+            {
+                "name": "Surprised",
+                "image": "spr_face_queen_14.webp"
+            },
+            {
+                "name": "Pursed lips",
+                "image": "spr_face_queen_15.webp"
+            },
+            {
+                "name": "Pursed lips",
+                "image": "spr_face_queen_16.webp"
+            },
+            {
+                "name": "Surprised",
+                "image": "spr_face_queen_17.webp"
+            },
+            {
+                "name": "Visor ????",
+                "image": "spr_face_queen_18.webp"
+            },
+            {
+                "name": "Visor HATE",
+                "image": "spr_face_queen_19.webp"
+            },
+            {
+                "name": "Visor LYING",
+                "image": "spr_face_queen_20.webp"
+            },
+            {
+                "name": "Visor BRO?",
+                "image": "spr_face_queen_21.webp"
+            },
+            {
+                "name": "Visor IDK",
+                "image": "spr_face_queen_22.webp"
+            },
+            {
+                "name": "Visor LMAO",
+                "image": "spr_face_queen_23.webp"
+            },
+            {
+                "name": "Visor TRUE",
+                "image": "spr_face_queen_24.webp"
+            },
+            {
+                "name": "Visor HA HA",
+                "image": "spr_face_queen_25.webp"
+            },
+            {
+                "name": "Visor NICE",
+                "image": "spr_face_queen_26.webp"
+            },
+            {
+                "name": "Visor BRO?",
+                "image": "spr_face_queen_27.webp"
+            },
+            {
+                "name": "Drinking",
+                "image": "spr_face_queen_28.webp"
+            },
+            {
+                "name": "Visor ウソ",
+                "image": "spr_ja_face_queen_20.webp"
+            },
+            {
+                "name": "Visor マジ?",
+                "image": "spr_ja_face_queen_21.webp"
+            },
+            {
+                "name": "Visor ワカラン",
+                "image": "spr_ja_face_queen_22.webp"
+            },
+            {
+                "name": "Visor WWW",
+                "image": "spr_ja_face_queen_23.webp"
+            },
+            {
+                "name": "Visor ホント",
+                "image": "spr_ja_face_queen_24.webp"
+            },
+            {
+                "name": "Visor ナイス",
+                "image": "spr_ja_face_queen_26.webp"
+            },
+            {
+                "name": "Visor マジ?",
+                "image": "spr_ja_face_queen_27.webp"
+            }
+        ]
+    },
+    "tenna": {
+        "name": "Tenna",
+        "type": "random",
+        "files": [
+            "snd_tv_voice_short.wav",
+            "snd_tv_voice_short_2.wav",
+            "snd_tv_voice_short_3.wav",
+            "snd_tv_voice_short_4.wav",
+            "snd_tv_voice_short_5.wav",
+            "snd_tv_voice_short_6.wav",
+            "snd_tv_voice_short_7.wav",
+            "snd_tv_voice_short_8.wav",
+            "snd_tv_voice_short_9.wav"
+        ],
+        "monophonic": true,
+        "playEveryN": 3,
+        "defaultMinPitch": 1,
+        "defaultMaxPitch": 1
+    },
+    "jevil": {
+        "name": "Jevil",
+        "type": "single",
+        "file": "snd_txtjok.wav"
+    },
+    "spamton": {
+        "name": "Spamton",
+        "type": "single",
+        "monophonic": true,
+        "defaultMinPitch": 1.2,
+        "defaultMaxPitch": 1.2,
+        "file": "snd_txtspam2.wav"
+    },
+    "old_man": {
+        "name": "Old Man (Gerson)",
+        "type": "single",
+        "playEveryN": 3,
+        "file": "snd_txger.wav"
+    },
+    "shadowguy": {
+        "name": "Shadowguy",
+        "type": "random",
+        "monophonic": true,
+        "fadeOut": true,
+        "files": [
+            "snd_shadowman_sax_1.wav",
+            "snd_shadowman_sax_2.wav",
+            "snd_shadowman_sax_3.wav",
+            "snd_shadowman_sax_long.wav"
+        ]
+    },
+    "kris": {
+        "name": "Kris",
+        "type": "single",
+        "file": "silence.wav"
+    },
+    "catti": {
+        "name": "Catti",
+        "type": "single",
+        "file": "snd_text.wav",
+        "defaultOffset": {
+            "x": -20,
+            "y": 0
+        },
+        "images": [
+            {
+                "name": "Unimpressed",
+                "image": "spr_face_catti_0.webp",
+                "default": true
+            },
+            {
+                "name": "Unimpressed talking",
+                "image": "spr_face_catti_1.webp"
+            },
+            {
+                "name": "Slightly annoyed",
+                "image": "spr_face_catti_2.webp"
+            },
+            {
+                "name": "Eyes closed",
+                "image": "spr_face_catti_3.webp"
+            },
+            {
+                "name": "Shocked",
+                "image": "spr_face_catti_4.webp"
+            },
+            {
+                "name": "Shocked talking",
+                "image": "spr_face_catti_5.webp"
+            },
+            {
+                "name": "Sad",
+                "image": "spr_face_catti_6.webp"
+            },
+            {
+                "name": "Annoyed squint",
+                "image": "spr_face_catti_7.webp"
+            }
+        ]
+    },
+    "jock": {
+        "name": "Jockington",
+        "type": "single",
+        "file": "snd_text.wav",
+        "defaultOffset": {
+            "x": -20,
+            "y": 0
+        },
+        "images": [
+            {
+                "name": "Jockington",
+                "image": "spr_face_jock0_0.webp",
+                "default": true
+            }
+        ]
+    },
+    "catty": {
+        "name": "Catty",
+        "type": "single",
+        "file": "snd_text.wav",
+        "defaultOffset": {
+            "x": -20,
+            "y": 0
+        },
+        "images": [
+            {
+                "name": "Neutral",
+                "image": "spr_face_catty_0.webp",
+                "default": true
+            },
+            {
+                "name": "Slightly open mouth",
+                "image": "spr_face_catty_1.webp"
+            },
+            {
+                "name": "Laughing",
+                "image": "spr_face_catty_2.webp"
+            },
+            {
+                "name": "Excited laugh",
+                "image": "spr_face_catty_3.webp"
+            },
+            {
+                "name": "Happy",
+                "image": "spr_face_catty_4.webp"
+            },
+            {
+                "name": "Wide eyed",
+                "image": "spr_face_catty_5.webp"
+            },
+            {
+                "name": "Smug",
+                "image": "spr_face_catty_6.webp"
+            },
+            {
+                "name": "In love",
+                "image": "spr_face_catty_7.webp"
+            },
+            {
+                "name": "Tongue out",
+                "image": "spr_face_catty_8.webp"
+            }
+        ]
+    },
+    "bratty": {
+        "name": "Bratty",
+        "type": "single",
+        "file": "snd_text.wav",
+        "defaultOffset": {
+            "x": -10,
+            "y": 4
+        },
+        "images": [
+            {
+                "name": "Neutral",
+                "image": "spr_face_bratty_0.webp",
+                "default": true
+            },
+            {
+                "name": "Surprised",
+                "image": "spr_face_bratty_1.webp"
+            },
+            {
+                "name": "Annoyed",
+                "image": "spr_face_bratty_2.webp"
+            },
+            {
+                "name": "Worried",
+                "image": "spr_face_bratty_3.webp"
+            },
+            {
+                "name": "Tongue out",
+                "image": "spr_face_bratty_4.webp"
+            },
+            {
+                "name": "Pained",
+                "image": "spr_face_bratty_5.webp"
+            },
+            {
+                "name": "Laughing",
+                "image": "spr_face_bratty_6.webp"
+            }
+        ]
+    },
+   
+    "burgerpants": {
+        "name": "Burgerpants",
+        "type": "single",
+        "file": "snd_text.wav",
+        "defaultOffset": {
+            "x": -10,
+            "y": -10
+        },
+        "images": [
+            {
+                "name": "Distressed",
+                "image": "spr_face_burgerpants_0.webp",
+                "default": true
+            },
+            {
+                "name": "Wide grin",
+                "image": "spr_face_burgerpants_1.webp"
+            },
+            {
+                "name": "Sinister grin",
+                "image": "spr_face_burgerpants_2.webp"
+            },
+            {
+                "name": "Smug",
+                "image": "spr_face_burgerpants_3.webp"
+            },
+            {
+                "name": "Eyes closed smug",
+                "image": "spr_face_burgerpants_4.webp"
+            },
+            {
+                "name": "Squished face",
+                "image": "spr_face_burgerpants_5.webp"
+            },
+            {
+                "name": "Talking smugly",
+                "image": "spr_face_burgerpants_6.webp"
+            },
+            {
+                "name": "Shocked",
+                "image": "spr_face_burgerpants_7.webp"
+            },
+            {
+                "name": "Annoyed",
+                "image": "spr_face_burgerpants_8.webp"
+            },
+            {
+                "name": "Melting sad",
+                "image": "spr_face_burgerpants_9.webp"
+            },
+            {
+                "name": "Manic",
+                "image": "spr_face_burgerpants_10.webp"
+            },
+            {
+                "name": "Melting closed eyes",
+                "image": "spr_face_burgerpants_11.webp"
+            },
+            {
+                "name": "Devious",
+                "image": "spr_face_burgerpants_12.webp"
+            },
+            {
+                "name": "Yelling",
+                "image": "spr_face_burgerpants_13.webp"
+            },
+            {
+                "name": "Shouting",
+                "image": "spr_face_burgerpants_14.webp"
+            },
+            {
+                "name": "Serious",
+                "image": "spr_face_burgerpants_15.webp"
+            }
+        ]
+    }
+}
